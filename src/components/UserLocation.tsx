@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { Marker, useMap } from "react-leaflet"
 
 type UserLocationProps = {
-    setUserLocation:React.Dispatch<React.SetStateAction<LatLng>>
+    setUserLocation:React.Dispatch<React.SetStateAction<LatLng | null>>
 }
 
 function UserLocation(props:UserLocationProps) {
@@ -12,6 +12,7 @@ function UserLocation(props:UserLocationProps) {
     useEffect(() => {
         map.locate().on("locationfound", (e) => {
             props.setUserLocation(e.latlng)
+            console.log(e.latlng)
         })
     }, [map])
 
