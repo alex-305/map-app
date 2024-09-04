@@ -21,7 +21,7 @@ function CustomControls(props:CustomControlProps) {
         <div className={'leaflet-' +props.yPosition + ' leaflet-'+props.xPosition}>
             <div className={props.className}>
                 <div ref={ref} 
-                className="leaflet-control leaflet-bar ">
+                className="leaflet-control  ">
                     {props.children}
                 </div>
             </div>

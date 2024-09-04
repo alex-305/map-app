@@ -29,16 +29,16 @@ function App() {
         <CustomControls yPosition="top" xPosition="left" className='ml-5 mt-5'>
           <Navbar userLocation={userLocation as LatLng}/>
         </CustomControls>
+        <CustomControls yPosition="bottom" xPosition="right" className='mr-5 mb-5'>
+          <NewPost setPosting={setPosting} posting={posting}/>
+        </CustomControls>
         <div className='leaflet-bottom leaflet-left ml-1 mb-1 bg-white px-1 rounded'>
           <MouseCoordinates/>
         </div>
       </MapContainer>
-      {/* <div className="absolute top-0 left-0 p-5 z-50">
-        <Navbar userLocation={userLocation as LatLng}/>
-      </div> */}
-      <div className="absolute bottom-0 right-0 p-4">
+      {/* <div className="absolute bottom-0 right-0 p-4">
         <NewPost setPosting={setPosting} posting={posting}/>
-      </div>
+      </div> */}
     </>
   )
 }
