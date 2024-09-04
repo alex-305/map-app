@@ -1,5 +1,4 @@
-import { LatLng } from "leaflet"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useMapEvents } from "react-leaflet"
 
 function MouseCoordinates() {
