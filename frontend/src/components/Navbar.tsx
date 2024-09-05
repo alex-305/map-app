@@ -1,4 +1,3 @@
-import { Separator } from "./ui/separator"
 import { mdiHome, mdiMinus, mdiPlus } from "@mdi/js"
 import Icon from "@mdi/react"
 import { Button } from "./ui/button"
@@ -7,7 +6,6 @@ import { useMap } from "react-leaflet"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import { Label } from "./ui/label"
 import Hoverable from "./Hoverable"
-import { useRef } from "react"
 
 type NavbarProps = {
     userLocation:LatLng
@@ -60,7 +58,7 @@ function Navbar(props:NavbarProps) {
             <Button onClick={zoomOut} variant={"link"} className="p-0">
                 <Icon path={mdiMinus} size={1}/>
             </Button>
-            
+
             <Button onClick={zoomIn} variant={"link"} className="p-0">
                 <Icon path={mdiPlus} size={1}/>
             </Button>
