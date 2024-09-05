@@ -21,10 +21,11 @@ function App() {
       <MapContainer 
       attributionControl={false}
       zoomControl={false}
-      center={[32, -45]} 
-      zoom={3} 
-      className="w-screen h-screen my-0 mx-0 px-0 py-0 absolute z-10">
-        <TileLayer className="z-0" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      center={[25, -11]} 
+      zoom={3}
+      className="w-screen h-screen my-0 mx-0 px-0 py-0 absolute z-10"
+      maxBounds={[[85,-180],[-85, 180]]}>
+        <TileLayer className="z-0" noWrap={true} minZoom={2} url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <UserLocation setUserLocation={setUserLocation}/>
         <CustomControls yPosition="top" xPosition="left" className='ml-5 mt-5'>
           <Navbar userLocation={userLocation as LatLng}/>
@@ -36,9 +37,6 @@ function App() {
           <MouseCoordinates/>
         </div>
       </MapContainer>
-      {/* <div className="absolute bottom-0 right-0 p-4">
-        <NewPost setPosting={setPosting} posting={posting}/>
-      </div> */}
     </>
   )
 }
