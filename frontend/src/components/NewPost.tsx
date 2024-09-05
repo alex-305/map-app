@@ -1,23 +1,17 @@
 import Icon from "@mdi/react"
-import { mdiCheckBold, mdiPencilBoxOutline } from "@mdi/js"
+import { mdiCheckBold, mdiEmoticon, mdiPencilBoxOutline, mdiSend } from "@mdi/js"
 import { Button } from "./ui/button"
 import { submitPost } from "@/scripts/submitPost"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { LatLng } from "leaflet"
+import { Popover, PopoverContent } from "./ui/popover"
+import { PopoverTrigger } from "@radix-ui/react-popover"
 
-type NewPostProps = {
-    posting:boolean
-    setPosting:React.Dispatch<React.SetStateAction<boolean>>
-}
+function NewPost() {
 
-function NewPost(props:NewPostProps) {
+    const [open, setOpen] = useState(false)
 
     const postTextAreaRef = useRef<HTMLTextAreaElement | null>(null)
-
-    const newNoteClicked = () => {
-        props.setPosting(true)
-        postTextAreaRef.current?.focus()
-    }
 
     const submitClicked = () => {
         const postText:string = postTextAreaRef.current?.value as string
@@ -27,39 +21,43 @@ function NewPost(props:NewPostProps) {
     }
 
     return (
-            <div className="flex flex-col items-center mb-3 z-10">
-        {props.posting ?
-            (
-            <>
+        <>
+            <Popover open={open} onOpenChange={setOpen}>
+                {<PopoverTrigger asChild className="cursor-pointer">
+                    <Icon 
+                        path={mdiPencilBoxOutline} 
+                        size={2} 
+                        className="m-0 p-0 bg-white rounded-md" />
+                </PopoverTrigger>}
+                <PopoverContent className="w-[500px] h-[200px] p-0 mr-5">
+                    <div className="flex flex-row h-full">
                         <textarea
                         ref={postTextAreaRef}
-                        className="resize-none w-5/6 h-full rounded text-black p-1 bg-white bg-opacity-90 shadow-lg"
-                        ></textarea>
-                        <Button 
-                            variant={"outline"} 
-                            size={"icon"} 
-                            className="mt-5 
-                            shadow-md 
-                            hover:shadow-lg hover:bg-green-300
-                            active:shadow-xl active:bg-green-400" 
+                        className="resize-none 
+                        flex-grow h-full
+                        rounded text-black p-1 
+                        bg-white bg-opacity-80 shadow-lg text-xl"
+                        />
+                        <div className="flex flex-col space-y-1 mt-auto mx-2 mb-1">
+                            <Button
+                            variant={"outline"}
+                            size={"icon"}
+                            className="shadow-md hover:shadow-lg active:shadow-xl"
                             onClick={submitClicked}>
-                            <Icon path={mdiCheckBold} size={1}/>
-                        </Button>
-            </>
-            )
-
-        : 
-        (
-            <Button 
-                className="shadow-md hover:shadow-lg
-                active:shadow-xl"
-                variant={"outline"} 
-                size={"icon"} 
-                onClick={newNoteClicked}>
-                <Icon path={mdiPencilBoxOutline} size={1} className="m-0 p-0" />
-            </Button>
-        )}
-            </div>
+                                <Icon path={mdiEmoticon} size={1}/>
+                            </Button>
+                            <Button
+                                variant={"outline"}
+                                size={"icon"}
+                                className="shadow-md hover:shadow-lg active:shadow-xl"
+                                onClick={submitClicked}>
+                                <Icon path={mdiSend} size={1}/>
+                            </Button>
+                        </div>
+                    </div>
+                </PopoverContent>
+            </Popover>
+        </>
     )
 }
 

@@ -4,12 +4,13 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card"
 type HoverableProps = {
     title:string
     children:ReactNode
+    hoverColor:string
 }
 
 function Hoverable(props:HoverableProps) {
 
     return (
-        <div className="flex justify-center items-center px-2 cursor-pointer">
+        <div className={"flex justify-center items-center px-2 cursor-pointer" + " hover:bg-"+props.hoverColor}>
             <HoverCard openDelay={0} closeDelay={0}>
                 <HoverCardTrigger className="">
                     <div className="h-100 text-black text-lg flex flex-col text-end">{props.title}</div>

@@ -27,11 +27,11 @@ function App() {
       maxBounds={[[85,-180],[-85, 180]]}>
         <TileLayer className="z-0" noWrap={true} minZoom={2} url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <UserLocation setUserLocation={setUserLocation}/>
-        <CustomControls yPosition="top" xPosition="left" className='ml-5 mt-5'>
+        <CustomControls yPosition="top" xPosition="left" className='ml-2 mt-2'>
           <Navbar userLocation={userLocation as LatLng}/>
         </CustomControls>
         <CustomControls yPosition="bottom" xPosition="right" className='mr-5 mb-5'>
-          <NewPost setPosting={setPosting} posting={posting}/>
+          <NewPost/>
         </CustomControls>
         <div className='leaflet-bottom leaflet-left ml-1 mb-1 bg-white px-1 rounded'>
           <MouseCoordinates/>

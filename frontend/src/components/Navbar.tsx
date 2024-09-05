@@ -7,6 +7,7 @@ import { useMap } from "react-leaflet"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import { Label } from "./ui/label"
 import Hoverable from "./Hoverable"
+import { useRef } from "react"
 
 type NavbarProps = {
     userLocation:LatLng
@@ -28,14 +29,17 @@ function Navbar(props:NavbarProps) {
         map.zoomIn()
     }
 
-    const feedOptions = ["All", "Following", "Latest"]
+    const feedOptions = ["Trending", "Following", "Latest"]
+
+    const hoverColor = "slate-200"
     
     return (
-        <nav className="flex flex-row bg-white rounded-lg shadow">
-            <Button className="m-0 px-2" onClick={homeClicked} variant={"link"}><Icon path={mdiHome} size={1}/></Button>
-            <Separator orientation="vertical" className="my-2"/>
+        <nav className="flex flex-row bg-white rounded-lg shadow px-2">
+            <Button className="m-0 pl-0 pr-2" onClick={homeClicked} variant={"link"}>
+                <Icon path={mdiHome} size={1}/>
+            </Button>
 
-            <Hoverable title="Feeds">
+            <Hoverable hoverColor={hoverColor} title="Feeds">
                 <RadioGroup>
                     {feedOptions.map((item, index) => (
                         <div className="flex items-center space-x-2">
@@ -46,16 +50,21 @@ function Navbar(props:NavbarProps) {
                 </RadioGroup>
             </Hoverable>
             
-            <Hoverable title="Account">
+            <Hoverable hoverColor={hoverColor} title="Account">
                 <div className="flex flex-col">
                     <Button className="p-0 my-1" variant="link">Your posts</Button>
                     <Button className="p-0 my-1" variant="link">Options</Button>
                 </div>
             </Hoverable>
 
-            <Button onClick={zoomOut} variant={"link"} className="p-0"><Icon path={mdiMinus} size={1}/></Button>
-            <Separator orientation="vertical" className="my-2"/>
-            <Button onClick={zoomIn} variant={"link"} className="p-0"><Icon path={mdiPlus} size={1}/></Button>
+            <Button onClick={zoomOut} variant={"link"} className="p-0">
+                <Icon path={mdiMinus} size={1}/>
+            </Button>
+            
+            <Button onClick={zoomIn} variant={"link"} className="p-0">
+                <Icon path={mdiPlus} size={1}/>
+            </Button>
+
         </nav>
     )
 }
