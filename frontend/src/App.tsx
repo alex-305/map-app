@@ -1,10 +1,10 @@
 // import { useState } from 'react'
-import { MapContainer, Pane, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer } from 'react-leaflet'
 import './App.css'
 
 import "leaflet/dist/leaflet.css";
 import NewPost from './components/NewPost';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UserLocation from './components/UserLocation';
 import { LatLng } from 'leaflet';
 import MouseCoordinates from './components/MouseCoordinates';
@@ -14,7 +14,6 @@ import CustomControls from './components/CustomControls';
 function App() {
 
   const [userLocation, setUserLocation] = useState<LatLng | null>(null)
-  const [posting, setPosting] = useState(false)
 
   return (
     <>

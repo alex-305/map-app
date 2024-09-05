@@ -1,9 +1,8 @@
 import Icon from "@mdi/react"
-import { mdiCheckBold, mdiEmoticon, mdiPencilBoxOutline, mdiSend } from "@mdi/js"
+import { mdiEmoticon, mdiPencilBoxOutline, mdiSend } from "@mdi/js"
 import { Button } from "./ui/button"
 import { submitPost } from "@/scripts/submitPost"
 import { useRef, useState } from "react"
-import { LatLng } from "leaflet"
 import { Popover, PopoverContent } from "./ui/popover"
 import { PopoverTrigger } from "@radix-ui/react-popover"
 
@@ -62,7 +61,3 @@ function NewPost() {
 }
 
 export default NewPost
-
-function setPosition(latlng: LatLng) {
-    throw new Error("Function not implemented.")
-}
