@@ -5,6 +5,8 @@ type Post = {
     username:string
     location:LatLng
     likeCount:number
+    replyCount:number
+    color:string
 }
 
 export default Post
