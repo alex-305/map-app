@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "types": ["node"],
+        "moduleResolution": "Node"
+    },
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.tsx",       
+        "resources/js/pages/Home.tsx"    ]
+}
