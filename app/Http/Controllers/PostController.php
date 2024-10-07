@@ -52,7 +52,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         $validatedData = $request->validate([
-            'author_id' => 'require|integer',
+            'author_id' => 'required|integer',
             'content' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
