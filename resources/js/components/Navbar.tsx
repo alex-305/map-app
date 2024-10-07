@@ -6,7 +6,9 @@ import { useMap, useMapEvents } from "react-leaflet"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import { Label } from "./ui/label"
 import Hoverable from "./Hoverable"
-import { useState } from "react"
+import LoginDropdown from "./LoginDropdown"
+import { useEffect, useState } from "react"
+import { get } from "@/scripts/http"
 
 type NavbarProps = {
     userLocation:LatLng
@@ -17,6 +19,15 @@ function Navbar(props:NavbarProps) {
     const map = useMap()
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
+
+    // login related hooks
+    const [loggedIn, setLoggedIn] = useState(false)
+    useEffect(() => {
+        (async () => {
+            const result = (await get('/check')).data.result
+            setLoggedIn(result);
+        })()
+    })
 
     const Tracker = () => {
         useMapEvents({
@@ -85,6 +96,13 @@ function Navbar(props:NavbarProps) {
                 <Icon color={reachedMaxZoom ? "gray" : "black"} path={mdiPlus} size={1}/>
             </Button>
 
+            <Hoverable hoverColor={"slate-200"} title="Login">
+                <LoginDropdown
+                    loggedIn={loggedIn}
+                    onLogout={() => setLoggedIn(false)}
+                    onLogin={() => setLoggedIn(true)}
+                />
+            </Hoverable>
         </nav>
     )
 }
