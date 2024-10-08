@@ -26,7 +26,3 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
         </>
     )
 }
-function zodResolver(formSchema: z.ZodObject<{ email: z.ZodString; password: z.ZodString }, "strip", z.ZodTypeAny, { email?: string; password?: string }, { email?: string; password?: string }>): import("react-hook-form").Resolver<{ email?: string; password?: string }, any> {
-    throw new Error("Function not implemented.")
-}
-
