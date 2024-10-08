@@ -1,21 +1,34 @@
 import Icon from "@mdi/react"
 import { mdiEmoticon, mdiPencilBoxOutline, mdiSend } from "@mdi/js"
 import { Button } from "./ui/button"
-import { submitPost } from "@/scripts/submitPost"
 import { useRef, useState } from "react"
 import { Popover, PopoverContent } from "./ui/popover"
 import { PopoverTrigger } from "@radix-ui/react-popover"
+import { post } from "@/scripts/http"
+import { useUserLocation } from "./UserLocationContext"
+import { NewPost } from "@/types/Post"
 
-function NewPost() {
+function NewPostButton() {
 
     const [open, setOpen] = useState(false)
 
     const postTextAreaRef = useRef<HTMLTextAreaElement | null>(null)
 
+    const userLocation = useUserLocation()
+
     const submitClicked = () => {
-        const postText:string = postTextAreaRef.current?.value as string
-        if(postText!=="") {
-            submitPost(postText)
+
+        const content = postTextAreaRef.current?.value as string
+
+        const newPost:NewPost = {
+            content: content,
+            latitude: userLocation.lat,
+            longitude: userLocation.lng,
+            color: 'green',
+        }
+        if(content!=="") {
+            console.log(content);
+            post('/posts',newPost)
         }
     }
 
@@ -60,4 +73,4 @@ function NewPost() {
     )
 }
 
-export default NewPost
+export default NewPostButton

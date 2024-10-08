@@ -1,13 +1,18 @@
-import { LatLng } from "leaflet"
 
-type Post = {
+export type Post = {
     content:string
     username:string
-    location:LatLng
+    latitude:number
+    longitude:number
     likeCount:number
     replyCount:number
     color:string
     id:number
 }
 
-export default Post
+export type NewPost = {
+    content:string
+    latitude:number
+    longitude:number
+    color:string
+}
