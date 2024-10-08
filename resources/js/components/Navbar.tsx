@@ -3,12 +3,10 @@ import Icon from "@mdi/react"
 import { Button } from "./ui/button"
 import { LatLng } from "leaflet"
 import { useMap, useMapEvents } from "react-leaflet"
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
-import { Label } from "./ui/label"
-import Hoverable from "./Hoverable"
 import LoginDropdown from "./LoginDropdown"
 import { useEffect, useState } from "react"
 import { get } from "@/scripts/http"
+import FeedDropdown from "./FeedDropdown"
 
 type NavbarProps = {
     userLocation:LatLng
@@ -55,18 +53,6 @@ function Navbar(props:NavbarProps) {
         map.zoomIn()
     }
 
-    function AccountActions() {
-        if (loggedIn)
-            return (
-                <div className="flex flex-col gap-0">
-                    <Button className="p-0" variant="link">Your posts</Button>
-                    <Button className="p-0" variant="link">Options</Button>
-                </div>
-            )
-    }
-
-    const feedOptions = ["Trending", "Following", "Latest"]
-    
     return (
         <nav className="flex flex-row bg-white rounded-lg shadow">
             <Tracker/>
@@ -74,31 +60,12 @@ function Navbar(props:NavbarProps) {
                 <Icon path={mdiHome} size={1}/>
             </Button>
 
-            <Hoverable hoverColor={"slate-200"} title="Feeds">
-                <RadioGroup>
-                    {feedOptions.map((item, index) => (
-                        <div key={item} className="flex items-center space-x-2">
-                            <RadioGroupItem value={item.toLowerCase()} id={index.toString()}/>
-                            <Label htmlFor={index.toString()}>{item}</Label>
-                        </div>
-                    ))}
-                </RadioGroup>
-            </Hoverable>
-            
-            <Hoverable hoverColor={"slate-200"} title={loggedIn ? "Account" : "Login"}>
-                    {loading == false ? (
-                        <div className="flex flex-col gap-4">
-                            <AccountActions />
-                            <LoginDropdown
-                                loggedIn={loggedIn}
-                                onLogout={() => setLoggedIn(false)}
-                                onLogin={() => setLoggedIn(true)}
-                            />
-                        </div>
-                    ) : (
-                        <>Loading...</>
-                    )}
-            </Hoverable>
+            <FeedDropdown />            
+            <LoginDropdown
+            loggedIn={loggedIn}
+            onLogin={() => {setLoggedIn(true)}}
+            onLogout={() => {setLoggedIn(false)}}
+            />
 
             <Button 
             onClick={zoomOut} 

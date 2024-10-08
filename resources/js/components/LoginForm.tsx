@@ -43,7 +43,7 @@ export default function LoginForm({ onLogin }) {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder="hello@mail.com" {...field} />
+                                <Input id="email" placeholder="hello@mail.com" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -56,7 +56,7 @@ export default function LoginForm({ onLogin }) {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input type="password" {...field} />
+                                <Input id="password" type="password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
