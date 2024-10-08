@@ -35,9 +35,12 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
                         <Input value={data.email} type="text" placeholder="Email" onChange={e => setData('email', e.target.value)} />
                         <Input value={data.password} type="password" placeholder="Password" onChange={e => setData('password', e.target.value)} />
                     </div>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">Log in</Button>
                 </form>
-                <RegisterDialog className="p-0 my-1" />
+                <div className="flex flex-row">
+                    <RegisterDialog />
+                    <Button className="!text-zinc-400" variant="link">Forgot password?</Button>
+                </div>
             </div>
         </>
     )
