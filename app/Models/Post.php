@@ -16,4 +16,13 @@ class Post extends Model
         'like_count',
         'author_id',
     ];
+
+    public function likes(){
+        return $this->hasMany(Like::class);
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
 }
