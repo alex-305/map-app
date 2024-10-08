@@ -23,11 +23,12 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'author_id' => 'require|integer',
             'content' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
         ]);
+
+        $validatedData['author_id'] = auth()->id();
 
         $post = Post::create($validatedData);
 

@@ -1,5 +1,5 @@
 import { CircleMarker, LayerGroup, Marker, Popup } from "react-leaflet";
-import UserLocation from "../UserLocation";
+import UserLocation from "../UserLocationContext";
 import PostBox from "../PostBox";
 import { useEffect, useState } from "react";
 import Post from "../../types/Post";

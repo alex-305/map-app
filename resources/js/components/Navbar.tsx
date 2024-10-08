@@ -9,6 +9,7 @@ import Hoverable from "./Hoverable"
 import LoginDropdown from "./LoginDropdown"
 import { useEffect, useState } from "react"
 import { get } from "@/scripts/http"
+import { useUserLocation } from "./UserLocationContext"
 
 type NavbarProps = {
     userLocation:LatLng
@@ -19,6 +20,7 @@ function Navbar(props:NavbarProps) {
     const map = useMap()
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
+    const userLocation = useUserLocation()
 
     // login related hooks
     const [loggedIn, setLoggedIn] = useState(false)
@@ -44,7 +46,7 @@ function Navbar(props:NavbarProps) {
 
 
     const homeClicked = () => {
-        map.flyTo(props.userLocation, 13)
+        map.flyTo(userLocation, 13)
     }
 
     const zoomOut = () => {
