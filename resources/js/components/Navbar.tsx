@@ -6,7 +6,9 @@ import { useMap, useMapEvents } from "react-leaflet"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import { Label } from "./ui/label"
 import Hoverable from "./Hoverable"
-import { useState } from "react"
+import LoginDropdown from "./LoginDropdown"
+import { useEffect, useState } from "react"
+import { get } from "@/scripts/http"
 
 type NavbarProps = {
     userLocation:LatLng
@@ -17,6 +19,17 @@ function Navbar(props:NavbarProps) {
     const map = useMap()
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
+
+    // login related hooks
+    const [loggedIn, setLoggedIn] = useState(false)
+    const [loading, setLoading] = useState(true)
+    useEffect(() => {
+        (async () => {
+            const result = (await get('/check')).data.result
+            setLoggedIn(result);
+            setLoading(false);
+        })()
+    }, [])
 
     const Tracker = () => {
         useMapEvents({
@@ -42,6 +55,16 @@ function Navbar(props:NavbarProps) {
         map.zoomIn()
     }
 
+    function AccountActions() {
+        if (loggedIn)
+            return (
+                <div className="flex flex-col gap-0">
+                    <Button className="p-0" variant="link">Your posts</Button>
+                    <Button className="p-0" variant="link">Options</Button>
+                </div>
+            )
+    }
+
     const feedOptions = ["Trending", "Following", "Latest"]
     
     return (
@@ -62,11 +85,19 @@ function Navbar(props:NavbarProps) {
                 </RadioGroup>
             </Hoverable>
             
-            <Hoverable hoverColor={"slate-200"} title="Account">
-                <div className="flex flex-col">
-                    <Button className="p-0 my-1" variant="link">Your posts</Button>
-                    <Button className="p-0 my-1" variant="link">Options</Button>
-                </div>
+            <Hoverable hoverColor={"slate-200"} title={loggedIn ? "Account" : "Login"}>
+                    {loading == false ? (
+                        <div className="flex flex-col gap-4">
+                            <AccountActions />
+                            <LoginDropdown
+                                loggedIn={loggedIn}
+                                onLogout={() => setLoggedIn(false)}
+                                onLogin={() => setLoggedIn(true)}
+                            />
+                        </div>
+                    ) : (
+                        <>Loading...</>
+                    )}
             </Hoverable>
 
             <Button 
@@ -84,7 +115,6 @@ function Navbar(props:NavbarProps) {
             (reachedMaxZoom ? "cursor-default" : "cursor-pointer hover:bg-slate-200")}>
                 <Icon color={reachedMaxZoom ? "gray" : "black"} path={mdiPlus} size={1}/>
             </Button>
-
         </nav>
     )
 }
