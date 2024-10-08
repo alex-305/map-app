@@ -10,7 +10,7 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
         password: ""
     })
 
-    async function login(e: HTMLFormElement) {
+    async function login(e) {
         e.preventDefault()
         const { errors } = await post('/login', data)
         if (!errors)
@@ -30,13 +30,13 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
     ) : (
         <>
             <div className="flex flex-col">
-                <div>
-                    <form onSubmit={login}>
-                        <Input value={data.email} placeholder="Email" onChange={e => setData('email', e.target.value)} />
-                        <Input value={data.password} placeholder="Password" onChange={e => setData('password', e.target.value)} />
-                        <Button type="submit">Submit</Button>
-                    </form>
-                </div>
+                <form className="flex flex-col gap-4" onSubmit={login}>
+                    <div className="flex flex-col gap-1">
+                        <Input value={data.email} type="text" placeholder="Email" onChange={e => setData('email', e.target.value)} />
+                        <Input value={data.password} type="password" placeholder="Password" onChange={e => setData('password', e.target.value)} />
+                    </div>
+                    <Button type="submit">Submit</Button>
+                </form>
                 <RegisterDialog className="p-0 my-1" />
             </div>
         </>
