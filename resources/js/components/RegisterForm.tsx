@@ -49,7 +49,7 @@ export default function RegisterForm({ onRegister }) {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="johndoe123" {...field} />
+                                <Input id="name" placeholder="johndoe123" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -62,7 +62,7 @@ export default function RegisterForm({ onRegister }) {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder="hello@mail.com" {...field} />
+                                <Input id="email" placeholder="hello@mail.com" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -75,7 +75,7 @@ export default function RegisterForm({ onRegister }) {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input type="password" {...field} />
+                                <Input id="password" type="password" {...field} />
                             </FormControl>
                         </FormItem>
                     )}
