@@ -10,9 +10,24 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
+        $request->validate([
+            'min_lat' => 'required|numeric',
+            'max_lat' => 'required|numeric',
+            'min_lng' => 'required|numeric',
+            'max_lng' => 'required|numeric',
+        ]);
+        $minLat = $request->query('min_lat');
+        $maxLat = $request->query('max_lat');
+        $minLng = $request->query('min_lng');
+        $maxLng = $request->query('max_lng');
+        
+        $posts = Post::whereBetween('latitude', [$minLat, $maxLat])
+        ->whereBetween('longitude', [$minLng, $maxLng])
+        ->orderBy('like_count')
+        ->limit(100)
+        ->get();
 
         return response()->json($posts, 200);
     }

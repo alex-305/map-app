@@ -1,8 +1,8 @@
 import { Circle, Popup } from "react-leaflet"
-import Post from "@/types/Post"
+import type { Post } from "@/types/Post"
 import Icon from "@mdi/react"
 import { mdiHeartOutline, mdiHeart, mdiCommentOutline } from "@mdi/js"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type FakePostProps = {
     post:Post
@@ -10,16 +10,19 @@ type FakePostProps = {
 
 function PostMarker(props:FakePostProps) {
 
+    useEffect(() => {
+        console.log(props.post)
+    }, [])
+
     const [liked, setLiked] = useState(false)
 
     return (
         <>
-            <Circle color={props.post.color} center={props.post.location} radius={50*props.post.likeCount}>
+            <Circle color={props.post.color} center={[props.post.latitude, props.post.longitude]} radius={50*props.post.likeCount || 300}>
                 <Popup>
                     <div>
                         <div>
                             <span className="font-semibold cursor-pointer"><a>{props.post.username}</a></span>
-                            {/* <span className="font-light">{props.post.location}</span> */}
                         </div>
                         <div className="font-normal py-2">{props.post.content}</div>
 

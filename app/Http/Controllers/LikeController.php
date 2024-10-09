@@ -9,18 +9,28 @@ use Illuminate\Http\Request;
 class LikeController extends Controller
 {
     public function likePost($postId){
+
+        $user_id = auth()->id();
+
         $post = Post::findOrFail($postId);
 
-        $like = $post->likes()->create([
-            'user_id' => 1,    //TODO: Replace with AUTH(user)
-        ]);
+        $like = Like::where('user_id', $user_id)->where('post_id', $postId)->first();
 
-        return response()->json($like, 201);
+        if($like) {
+            return response()->json(['message' => 'Already liked this post'], 409);
+        }
+
+        $like = $post->likes()->create(['user_id' => $user_id,]);
+        
+        return response()->json(['message' => 'Successfully liked post'], 201);
     }
 
     public function unlikePost($postId)
     {
-        $like = Like::where('post_id', $postId)->where('user_id', 1)->firstOrFail(); // Replace '1' with actual user ID
+        $user_id = auth()->id();
+
+        $like = Like::where('post_id', $postId)->where('user_id', $user_id)->firstOrFail();
+
         $like->delete();
 
         return response()->json(null, 204);

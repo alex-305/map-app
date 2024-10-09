@@ -11,8 +11,9 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
+Route::get('posts', [PostController::class, 'index']);
 
-Route::apiResource('posts', PostController::class)->middleware('auth');
+Route::apiResource('posts', PostController::class)->except('index')->middleware('auth');
 
 Route::controller(LoginController::class)->group(function () {
     Route::post('/register', 'register');
