@@ -31,10 +31,8 @@ class LoginController extends Controller {
             'password' => ['required']
         ]);
 
-        $user = User::where('email', $validatedData['email'])->first();
-
-        if ($user && Hash::check($validatedData['password'], $user->password)) {
-            Auth::login($user);
+        if (Auth::attempt($validatedData)) {
+            $request->session()->regenerate();
 
             return response()->json(status: 200);
         }
