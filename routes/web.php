@@ -22,7 +22,7 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/check', 'isLoggedIn');
 });
 
-Route::controller(LoginController::class)->group(function () {
+Route::controller(LikeController::class)->group(function () {
     Route::post('/posts/{post}/like', 'likePost')->middleware('auth');
     Route::delete('/posts/{post}/unlike', 'unlikePost')->middleware('auth');
     Route::get('/posts/{post}/like', 'isPostLiked')->middleware('auth');
