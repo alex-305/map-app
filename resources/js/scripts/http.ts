@@ -19,8 +19,6 @@ async function http_request(req_type: string, url: string, headers_passed?: any,
   // we have to manually put the csrf token in the request
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-  console.log(payload)
-
   const headers = {
     ...headers_passed,
     'X-CSRF-TOKEN': csrfToken,
