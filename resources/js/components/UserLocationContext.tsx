@@ -19,7 +19,6 @@ export function UserLocationProvider({ children }: UserLocationProviderProps) {
     useEffect(() => {
         map.locate().on("locationfound", (e) => {
             setUserLocation(e.latlng)
-            console.log(e.latlng)
         })
     }, [map])
 

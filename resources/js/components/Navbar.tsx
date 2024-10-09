@@ -44,7 +44,9 @@ function Navbar(props:NavbarProps) {
 
 
     const homeClicked = () => {
-        map.flyTo(userLocation, 13)
+        map.flyTo(userLocation, 13, {
+            duration: 1
+        })
     }
 
     const zoomOut = () => {

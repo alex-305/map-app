@@ -22,10 +22,13 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/check', 'isLoggedIn');
 });
 
-// routes for liking unliking posts
-Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->middleware('auth');
-Route::delete('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->middleware('auth');
+Route::controller(LikeController::class)->group(function () {
+    Route::post('/posts/{post}/like', 'likePost')->middleware('auth');
+    Route::delete('/posts/{post}/unlike', 'unlikePost')->middleware('auth');
+    Route::get('/posts/{post}/like', 'isPostLiked')->middleware('auth');
+});
 
-// routes for adding deleting comments
-Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->middleware('auth');
-Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
+Route::controller(CommentController::class)->group(function () {
+    Route::post('/posts/{post}/comments', 'store')->middleware('auth');
+    Route::delete('/posts/{post}/comments/{comment}', 'destroy')->middleware('auth');
+});

@@ -4,19 +4,21 @@ import { Button } from "./ui/button"
 import { useRef, useState } from "react"
 import { Popover, PopoverContent } from "./ui/popover"
 import { PopoverTrigger } from "@radix-ui/react-popover"
-import { post } from "@/scripts/http"
+import { http_status_type, post } from "@/scripts/http"
 import { useUserLocation } from "./UserLocationContext"
 import { NewPost } from "@/types/Post"
+import { useMap } from "react-leaflet"
 
 function NewPostButton() {
 
     const [open, setOpen] = useState(false)
+    const map = useMap()
 
     const postTextAreaRef = useRef<HTMLTextAreaElement | null>(null)
 
     const userLocation = useUserLocation()
 
-    const submitClicked = () => {
+    const submitClicked = async() => {
 
         const content = postTextAreaRef.current?.value as string
 
@@ -27,8 +29,13 @@ function NewPostButton() {
             color: 'green',
         }
         if(content!=="") {
-            console.log(content);
-            post('/posts',newPost)
+            const response = await post('/posts',newPost)
+
+            if(http_status_type(response.status)==="SUCCESS") {
+                map.flyTo(userLocation, 13, {
+                    duration: 1
+                })
+            }
         }
     }
 

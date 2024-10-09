@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('content');
             $table->decimal('latitude');
             $table->decimal('longitude');
+            $table->decimal('like_count')->default(0);
+            $table->decimal('comment_count')->default(0);
             $table->timestamps();
             $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
         });
