@@ -65,8 +65,14 @@ function Navbar(props:NavbarProps) {
             <FeedDropdown />            
             <LoginDropdown
             loggedIn={loggedIn}
-            onLogin={() => {setLoggedIn(true)}}
-            onLogout={() => {setLoggedIn(false)}}
+            onLogin={() => {
+                setLoggedIn(true)
+                location.reload() // TODO try to find a way to avoid this
+            }}
+            onLogout={() => {
+                setLoggedIn(false)
+                location.reload() // TODO this too
+            }}
             />
 
             <Button 
