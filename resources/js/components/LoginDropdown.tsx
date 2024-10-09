@@ -19,7 +19,7 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
             onLogout()
     }
 
-    return !loggedIn ? (
+    return loggedIn ? (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="link">Account</Button>
