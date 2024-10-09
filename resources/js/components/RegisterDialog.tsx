@@ -15,7 +15,7 @@ export function RegisterDialog() {
       <div>
          <Dialog>
           <DialogTrigger asChild>
-            <p>Register</p>
+            <Button variant='link'>Register</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

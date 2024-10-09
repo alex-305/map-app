@@ -1,32 +1,34 @@
 import { useState } from "react"
 import { Button } from "./ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
+import { Label } from "./ui/label"
 
-type feedOptions = "Trending" | "Following" | "Latest"    
+const feedOptions = ["Trending", "Following", "Latest"]
 
 export default function FeedDropdown() {
-  const [feed, setFeed] = useState<feedOptions>("Trending")
+  const [feed, setFeed] = useState("Trending")
 
   return (
-    <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+    <Popover>
+        <PopoverTrigger asChild>
             <Button variant="link">Feeds</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="ml-4 w-56">
-            <DropdownMenuRadioGroup value={feed} onValueChange={e => setFeed(e as feedOptions)} >
-                <DropdownMenuRadioItem value="Trending">Trending</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Following">Following</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="Latest">Latest</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-        </DropdownMenuContent>
-    </DropdownMenu>
+        </PopoverTrigger>
+        <PopoverContent className="ml-4 w-32">
+            <RadioGroup
+                onValueChange={v => setFeed(v)}
+                defaultValue={feedOptions[0]}
+            >
+                {feedOptions.map((f, i) => {
+                    return (
+                        <div key={i} className="flex items-center space-x-2">
+                            <RadioGroupItem value={f} id={f} />
+                            <Label htmlFor={f}>{f}</Label>
+                        </div>
+                    )
+                })}
+            </RadioGroup>
+        </PopoverContent>
+    </Popover>
   )  
 }
