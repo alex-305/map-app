@@ -59,4 +59,3 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
         </DropdownMenu>
     )  
 }
-
