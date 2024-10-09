@@ -4,6 +4,16 @@ export async function del(url: string, payload?: any, headers?: any): Promise<an
 
 export async function get(url: string, headers?: any): Promise<any> { return http_request('GET', url, headers) }
 
+export type HTTP_STATUS_CLASSES = "INFORMATIONAL" | "SUCCESS" | "REDIRECTION" | "CLIENT" | "ERROR"
+
+export function http_status_type(status:number):HTTP_STATUS_CLASSES {
+  if(status >=100 && status < 200) return "INFORMATIONAL"
+  if(status >=200 && status < 300) return "SUCCESS"
+  if(status >=300 && status < 400) return "REDIRECTION"
+  if(status >=400 && status < 500) return "CLIENT"
+  return "ERROR"
+}
+
 
 async function http_request(req_type: string, url: string, headers_passed?: any, payload?: any): Promise<any> {
   // we have to manually put the csrf token in the request
