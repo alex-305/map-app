@@ -1,5 +1,4 @@
 import LoginForm from "./LoginForm"
-import { RegisterDialog } from "./RegisterDialog"
 import { Button } from "./ui/button"
 import { post } from "@/scripts/http"
 import {
@@ -7,9 +6,11 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    DropdownMenuGroup,
     DropdownMenuSeparator
 } from "./ui/dropdown-menu"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { RegisterDialog } from "./RegisterDialog"
+import { Separator } from "./ui/separator"
 
 export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
     async function logout() {
@@ -18,44 +19,38 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
             onLogout()
     }
 
-    return (
+    return loggedIn ? (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="link">{loggedIn ? "Account" : "Login"}</Button>
+                <Button variant="link">Account</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-                {loggedIn === true ? (
-                    <>
-                        <DropdownMenuItem>
-                            Your Posts
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Settings
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={logout}>
-                            Logout
-                        </DropdownMenuItem>
-                    </>
-                ) : (
-                    <>
-                        <DropdownMenuGroup>
-                            <div className="p-2">
-                                <LoginForm onLogin={onLogin} />
-                            </div>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem onSelect={e => e.preventDefault()}>
-                                <RegisterDialog />
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                Forgot password?
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    </>
-                )}
+            <DropdownMenuContent onCloseAutoFocus={e => e.preventDefault()} className="w-56">
+                <DropdownMenuItem>
+                    Your Posts
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logout}>
+                    Logout
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )  
+    ) : (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button variant="link">Login</Button>
+            </PopoverTrigger>
+            <PopoverContent >
+                <LoginForm onLogin={onLogin} />
+                <Separator className="mt-4 mb-2"/>
+                <div>
+                    <RegisterDialog />
+                    <Button className="text-muted-foreground" variant="link">Forgot password?</Button>
+                </div>
+            </PopoverContent>
+        </Popover>
+    ) 
 }
+
