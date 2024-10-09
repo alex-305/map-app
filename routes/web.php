@@ -22,9 +22,12 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/check', 'isLoggedIn');
 });
 
+Route::controller(LoginController::class)->group(function () {
 // routes for liking unliking posts
 Route::post('/posts/{post}/like', [LikeController::class, 'likePost'])->middleware('auth');
 Route::delete('/posts/{post}/unlike', [LikeController::class, 'unlikePost'])->middleware('auth');
+Route::get('/posts/{post}/like', [LikeController::class, 'isPostLiked'])->middleware('auth');
+});
 
 // routes for adding deleting comments
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->middleware('auth');

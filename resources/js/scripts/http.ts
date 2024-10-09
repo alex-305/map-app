@@ -7,7 +7,9 @@ export async function get(url: string, headers?: any): Promise<any> { return htt
 
 async function http_request(req_type: string, url: string, headers_passed?: any, payload?: any): Promise<any> {
   // we have to manually put the csrf token in the request
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+  console.log(payload)
 
   const headers = {
     ...headers_passed,
@@ -15,29 +17,28 @@ async function http_request(req_type: string, url: string, headers_passed?: any,
     'Accept': 'application/json'
   }
 
-  if(req_type==='POST') {
+  if(['POST', 'PUT', 'PATCH'].includes(req_type)) {
     headers['Content-Type'] = 'application/json'
   }
 
   const requestOptions: RequestInit = {
     method: req_type,
-    headers: headers
+    headers
   }
 
-  if(payload) {
-    requestOptions['body'] = payload
+  if(payload && ['POST', 'PUT', 'PATCH'].includes(req_type)) {
+    requestOptions['body'] = JSON.stringify(payload)
   }
 
   const res = await fetch(url, requestOptions)
 
-
-  const data = await res.json()
+  const data = await res.json() ?? {}
 
   let errors: {
     message?: string
   } | undefined
 
-  const status = res.status
+  const status:number = res.status
 
   if (!res.ok)
     errors = { message: data.message }

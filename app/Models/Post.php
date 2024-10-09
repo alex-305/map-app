@@ -14,6 +14,7 @@ class Post extends Model
         'latitude',
         'longitude',
         'like_count',
+        'comment_count',
         'author_id',
     ];
 

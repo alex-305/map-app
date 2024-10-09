@@ -21,8 +21,8 @@ class LoginController extends Controller {
             'password' => Hash::make($validatedData['password'])
         ]);
 
-        $res = Auth::login($user);
-        return response()->json($res, 200);
+        Auth::login($user);
+        return response()->json(['message'=> 'User successfully registered an account.'], 200);
     }
 
     public function login(Request $request) {

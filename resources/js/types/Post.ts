@@ -4,8 +4,8 @@ export type Post = {
     username:string
     latitude:number
     longitude:number
-    likeCount:number
-    replyCount:number
+    like_count:number
+    comment_count:number
     color:string
     id:number
 }

@@ -1,5 +1,5 @@
 import { bounds, latLng } from "leaflet"
-import PostMarker from "./PostMarker"
+import PostCircle from "./PostCircle"
 import type { Post } from "@/types/Post"
 import { useEffect, useState } from "react"
 import { useMap } from "react-leaflet"
@@ -25,10 +25,6 @@ function PostContainer() {
 
             const response = await get(`/posts?min_lat=${minLat}&min_lng=${minLng}&max_lat=${maxLat}&max_lng=${maxLng}`)
 
-            console.log(response)
-
-            console.log(bounds)
-
             setPosts(response.data as Post[] || [])
             
         }
@@ -50,7 +46,7 @@ function PostContainer() {
     return (
         <>
             {posts.map((post:Post, _) => (
-                <PostMarker key={post.id} post={post}/>
+                <PostCircle key={post.id} post={post}/>
             ))
             }
         </>
