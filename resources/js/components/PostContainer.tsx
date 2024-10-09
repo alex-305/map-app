@@ -1,41 +1,55 @@
-import { latLng } from "leaflet"
+import { bounds, latLng } from "leaflet"
 import PostMarker from "./PostMarker"
-import type Post from "@/types/Post"
+import type { Post } from "@/types/Post"
+import { useEffect, useState } from "react"
+import { useMap } from "react-leaflet"
+import { get } from '../scripts/http'
 
 function PostContainer() {
 
-    const fakePosts:Post[] = [{
-        content: "We live where you vacation 😝",
-        location: latLng([25.8, -80.3]),
-        likeCount: 458,
-        replyCount: 32,
-        username: "John",
-        color: "blue",
-        id: 0
-    },
-    {
-        content: "What's up party people? Where can I find a decent IPA around here?",
-        location: latLng([30.2, -85.1]),
-        likeCount: 58,
-        replyCount: 4,
-        username: "Tim",
-        color: "red",
-        id: 1,
-    },
-    {
-        content: "EAST COAST the BEAST COST try and prove me wrong 🤷‍♂️👑",
-        location: latLng([40.728, -73.992]),
-        likeCount: 4504,
-        replyCount: 421,
-        username: "Raul",
-        color: "blue",
-        id: 2,
-    }
-]
+    const [posts, setPosts] = useState<Post[] | []>([])
+
+    const map = useMap()
+
+    useEffect(() => {
+
+        if(!map) return
+
+        const getBounds = async() => {
+            const bounds = map.getBounds()
+            const minLat = bounds.getSouthWest().lat
+            const minLng = bounds.getSouthWest().lng
+            const maxLat = bounds.getNorthEast().lat
+            const maxLng = bounds.getNorthEast().lng
+
+
+            const response = await get(`/posts?min_lat=${minLat}&min_lng=${minLng}&max_lat=${maxLat}&max_lng=${maxLng}`)
+
+            console.log(response)
+
+            console.log(bounds)
+
+            setPosts(response.data as Post[] || [])
+            
+        }
+
+        getBounds()
+
+        const handleMapMove = () => {
+            getBounds()
+        }
+
+        map.on('moveend', handleMapMove)
+
+        return () => {
+            map.off('moveend', handleMapMove)
+        }
+
+    }, [map])
 
     return (
         <>
-            {fakePosts.map((post:Post, _) => (
+            {posts.map((post:Post, _) => (
                 <PostMarker key={post.id} post={post}/>
             ))
             }
