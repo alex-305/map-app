@@ -11,8 +11,11 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { RegisterDialog } from "./RegisterDialog"
 import { Separator } from "./ui/separator"
+import { useUserInfo } from "./UserInfoContext"
 
-export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
+export default function LoginDropdown({ onLogin, onLogout }) {
+    const { loggedIn } = useUserInfo()
+    
     async function logout() {
         const { errors } = await post('/logout')
         if (!errors)

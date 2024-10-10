@@ -5,15 +5,13 @@ import { useEffect, useRef, useState } from "react"
 import { Popover, PopoverContent } from "./ui/popover"
 import { PopoverTrigger } from "@radix-ui/react-popover"
 import { http_status_type, post } from "@/scripts/http"
-import { useUserLocation } from "./UserLocationContext"
 import { NewPost } from "@/types/Post"
 import { useMap } from "react-leaflet"
 import HexColorPicker from '@/components/HexColorPicker'
-import { json } from "stream/consumers"
 import { HSLToHex } from "@/scripts/colorConversion"
+import { useUserInfo } from "./UserInfoContext"
 
 function NewPostButton() {
-
     const [open, setOpen] = useState(false)
     const [sliderValue, setSliderValue] = useState(0)
     const [color, setColor] = useState('FFFFFF')
@@ -26,7 +24,7 @@ function NewPostButton() {
 
     const postTextAreaRef = useRef<HTMLTextAreaElement | null>(null)
 
-    const userLocation = useUserLocation()
+    const { userLocation } = useUserInfo()
 
     const submitClicked = async() => {
 
