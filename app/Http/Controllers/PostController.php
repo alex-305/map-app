@@ -40,7 +40,8 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'content' => 'required|string',
             'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric'
+            'longitude' => 'required|numeric',
+            'color' => 'required|string',
         ]);
 
         $validatedData['author_id'] = auth()->id();
