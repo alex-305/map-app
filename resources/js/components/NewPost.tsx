@@ -1,17 +1,27 @@
 import Icon from "@mdi/react"
 import { mdiEmoticon, mdiPencilBoxOutline, mdiSend } from "@mdi/js"
 import { Button } from "./ui/button"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Popover, PopoverContent } from "./ui/popover"
 import { PopoverTrigger } from "@radix-ui/react-popover"
 import { http_status_type, post } from "@/scripts/http"
 import { useUserLocation } from "./UserLocationContext"
 import { NewPost } from "@/types/Post"
 import { useMap } from "react-leaflet"
+import HexColorPicker from '@/components/HexColorPicker'
+import { json } from "stream/consumers"
+import { HSLToHex } from "@/scripts/colorConversion"
 
 function NewPostButton() {
 
     const [open, setOpen] = useState(false)
+    const [sliderValue, setSliderValue] = useState(0)
+    const [color, setColor] = useState('FFFFFF')
+
+    useEffect(() => {
+        setColor(HSLToHex(sliderValue, 100, 95))
+    }, [sliderValue])
+
     const map = useMap()
 
     const postTextAreaRef = useRef<HTMLTextAreaElement | null>(null)
@@ -26,10 +36,12 @@ function NewPostButton() {
             content: content,
             latitude: userLocation.lat,
             longitude: userLocation.lng,
-            color: 'green',
+            color: HSLToHex(sliderValue, 100, 50),
         }
+
+        console.log(JSON.stringify(newPost))
         if(content!=="") {
-            const response = await post('/posts',newPost)
+            const response = await post('/posts', newPost)
 
             if(http_status_type(response.status)==="SUCCESS") {
                 map.flyTo(userLocation, 13, {
@@ -42,22 +54,23 @@ function NewPostButton() {
     return (
         <>
             <Popover open={open} onOpenChange={setOpen}>
-                {<PopoverTrigger asChild className="cursor-pointer">
+                <PopoverTrigger asChild className="cursor-pointer">
                     <Icon 
                         path={mdiPencilBoxOutline} 
                         size={2} 
                         className="m-0 p-0 bg-white rounded-md" />
-                </PopoverTrigger>}
-                <PopoverContent className="w-[500px] h-[200px] p-0 mr-5">
+                </PopoverTrigger>
+                <PopoverContent className={`w-[500px] h-[200px] p-0 mr-5`}>
                     <div className="flex flex-row h-full">
                         <textarea
                         ref={postTextAreaRef}
-                        className="resize-none 
-                        flex-grow h-full
-                        rounded text-black p-1 
-                        bg-white bg-opacity-80 shadow-lg text-xl"
+                        className={
+                            `resize-none flex-grow h-full rounded 
+                            text-black p-1 shadow-lg text-xl`}
+                        style={{backgroundColor: `#${color}`}}
                         />
-                        <div className="flex flex-col space-y-1 mt-auto mx-2 mb-1">
+                        <div className="flex flex-col space-y-1 my-1 mx-2">
+                            <HexColorPicker setSliderValue={setSliderValue} className="h-full inline-flex"/>
                             <Button
                             variant={"outline"}
                             size={"icon"}
