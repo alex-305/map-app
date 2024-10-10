@@ -1,35 +1,18 @@
 import { mdiHome, mdiMinus, mdiPlus } from "@mdi/js"
 import Icon from "@mdi/react"
 import { Button } from "./ui/button"
-import { LatLng } from "leaflet"
 import { useMap, useMapEvents } from "react-leaflet"
 import LoginDropdown from "./LoginDropdown"
-import { useEffect, useState } from "react"
-import { get } from "@/scripts/http"
+import { useState } from "react"
 import FeedDropdown from "./FeedDropdown"
-import { useUserLocation } from "./UserLocationContext"
+import { useUserInfo } from "./UserInfoContext"
 
-type NavbarProps = {
-    userLocation:LatLng
-}
-
-function Navbar(props:NavbarProps) {
-
+function Navbar() {
     const map = useMap()
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
-    const userLocation = useUserLocation()
 
-    // login related hooks
-    const [loggedIn, setLoggedIn] = useState(false)
-    const [loading, setLoading] = useState(true)
-    useEffect(() => {
-        (async () => {
-            const result = (await get('/check')).data.result
-            setLoggedIn(result);
-            setLoading(false);
-        })()
-    }, [])
+    const { userLocation, setLoggedIn }= useUserInfo()
 
     const Tracker = () => {
         useMapEvents({
@@ -41,7 +24,6 @@ function Navbar(props:NavbarProps) {
         })
         return null
     }
-
 
     const homeClicked = () => {
         map.flyTo(userLocation, 13, {
@@ -66,7 +48,6 @@ function Navbar(props:NavbarProps) {
 
             <FeedDropdown />            
             <LoginDropdown
-            loggedIn={loggedIn}
             onLogin={() => {
                 setLoggedIn(true)
                 location.reload() // TODO try to find a way to avoid this
