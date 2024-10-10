@@ -69,8 +69,8 @@ function NewPostButton() {
                             text-black p-1 shadow-lg text-xl`}
                         style={{backgroundColor: `#${color}`}}
                         />
-                        <div className="flex flex-col space-y-1 my-1 mx-2 overflow-y-auto">
-                            <HexColorPicker setSliderValue={setSliderValue}/>
+                        <div className="flex flex-col space-y-1 my-1 mx-2">
+                            <HexColorPicker setSliderValue={setSliderValue} className="h-full inline-flex"/>
                             <Button
                             variant={"outline"}
                             size={"icon"}
