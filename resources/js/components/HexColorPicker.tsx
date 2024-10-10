@@ -5,6 +5,7 @@ import * as React from "react"
 
 type HexColorPickerProps = {
     setSliderValue:Dispatch<SetStateAction<number>>
+    className?:string
 }
 
 function HexColorPicker(props:HexColorPickerProps) {
@@ -20,7 +21,7 @@ function HexColorPicker(props:HexColorPickerProps) {
 
     return (
         <>
-            <input onChange={handleSliderChange} className="slider" type="range" value={sliderValue} min="0" max="360" />
+            <input onChange={handleSliderChange} className={"slider " + props.className} type="range" value={sliderValue} min="0" max="360" />
         </>
     )
 }

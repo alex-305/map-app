@@ -60,7 +60,7 @@ function NewPostButton() {
                         size={2} 
                         className="m-0 p-0 bg-white rounded-md" />
                 </PopoverTrigger>
-                <PopoverContent className={`w-[500px] h-[200px] p-0 mr-5`} style={{backgroundColor: `#${color}`}}>
+                <PopoverContent className={`w-[500px] h-[200px] p-0 mr-5`}>
                     <div className="flex flex-row h-full">
                         <textarea
                         ref={postTextAreaRef}
@@ -69,7 +69,7 @@ function NewPostButton() {
                             text-black p-1 shadow-lg text-xl`}
                         style={{backgroundColor: `#${color}`}}
                         />
-                        <div className="flex flex-col space-y-1 mt-auto mx-2 mb-1">
+                        <div className="flex flex-col space-y-1 my-1 mx-2 overflow-y-auto">
                             <HexColorPicker setSliderValue={setSliderValue}/>
                             <Button
                             variant={"outline"}

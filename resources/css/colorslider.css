@@ -1,6 +1,4 @@
-.slidecontainer {
-    width: 100%;
-}
+
 
 .slider {
     -webkit-appearance: none;
@@ -8,7 +6,7 @@
     --value: 65%;
     --saturation: 90%;
     background: linear-gradient(
-        to right,
+        to bottom,
         hsl(0, var(--saturation), var(--value)),
         hsl(30, var(--saturation), var(--value)),
         hsl(60, var(--saturation), var(--value)),
@@ -22,7 +20,9 @@
         hsl(300, var(--saturation), var(--value)),
         hsl(360, var(--saturation), var(--value))
     );
-    transform: rotate(-90deg);
+    writing-mode: vertical-lr;
+
+    border-radius: 5px;
 }
 
 .slider::-webkit-slider-thumb {
@@ -31,10 +31,10 @@
     width: 25px;
     height: 25px;
     background: transparent;
-    border: 2px solid #FFFFFF;
+    border: 2px solid #353535;
     cursor: pointer;
     border-radius: 50%;
-    box-shadow: 0 0 0 5px white;
+    box-shadow: 0 0 0 2px #353535;
 }
 
 .slider::-moz-range-thumb {
