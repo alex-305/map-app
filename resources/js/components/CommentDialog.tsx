@@ -17,8 +17,10 @@ export function CommentDialog({ postId, children, onComment }) {
 
   async function comment() {
     const { errors } = await post(`/posts/${postId}/comments`, { content })
-    if (!errors)
+    if (!errors) {
       onComment()
+      setContent("")
+    }
   }
 
   return (
