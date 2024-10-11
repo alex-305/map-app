@@ -24,7 +24,7 @@ function NewPostButton() {
 
     const postTextAreaRef = useRef<HTMLTextAreaElement | null>(null)
 
-    const { userLocation } = useUserInfo()
+    const { userLocation, loggedIn } = useUserInfo()
 
     const submitClicked = async() => {
 
@@ -49,7 +49,7 @@ function NewPostButton() {
         }
     }
 
-    return (
+    return loggedIn === true ? (
         <>
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild className="cursor-pointer">
@@ -88,7 +88,7 @@ function NewPostButton() {
                 </PopoverContent>
             </Popover>
         </>
-    )
+    ) : <></>
 }
 
 export default NewPostButton
