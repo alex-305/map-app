@@ -17,7 +17,7 @@ type UserInfoProviderProps = {
 
 export function UserInfoProvider({ children }: UserInfoProviderProps) {
     const [userLocation, setUserLocation] = useState<LatLng | null>(null)
-    const [loggedIn, setLoggedIn] = useState(false)
+    const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
 
     useEffect(() => {
         (async () => {

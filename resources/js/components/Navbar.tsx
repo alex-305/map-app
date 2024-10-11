@@ -12,7 +12,7 @@ function Navbar() {
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
 
-    const { userLocation, setLoggedIn }= useUserInfo()
+    const { userLocation, loggedIn, setLoggedIn }= useUserInfo()
 
     const Tracker = () => {
         useMapEvents({
@@ -39,7 +39,7 @@ function Navbar() {
         map.zoomIn()
     }
 
-    return (
+    return loggedIn !== null ? (
         <nav className="flex flex-row bg-white rounded-lg shadow">
             <Tracker/>
             <Button className={"m-0 pl-0 px-2 hover:bg-slate-200 rounded-r-none"} onClick={homeClicked} variant={"link"}>
@@ -74,7 +74,7 @@ function Navbar() {
                 <Icon color={reachedMaxZoom ? "gray" : "black"} path={mdiPlus} size={1}/>
             </Button>
         </nav>
-    )
+    ) : <></>
 }
 
 export default Navbar
