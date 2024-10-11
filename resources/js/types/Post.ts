@@ -16,3 +16,12 @@ export type NewPost = {
     longitude:number
     color:string
 }
+
+export type Comment = {
+    author_id: number
+    content: string
+    created_at: string
+    id: number
+    post_id: number
+    updated_at: string
+}

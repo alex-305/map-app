@@ -12,6 +12,7 @@ import { Textarea } from './ui/textarea'
 import { post } from '@/scripts/http'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { Post } from "@/types/Post"
+import CommentList from './CommentList'
 
 interface CommentDialogProps {
   post: Post,
@@ -30,10 +31,6 @@ export function CommentDialog(props: CommentDialogProps) {
     }
   }
 
-  useEffect(() => {
-    
-  })
-
   return (
     <>
       <div>
@@ -48,7 +45,7 @@ export function CommentDialog(props: CommentDialogProps) {
                 <DialogDescription>What do you have to say?</DialogDescription>
               </div>
             </DialogHeader>
-            <div className='h-32'>
+            <div className='h-16'>
               <Textarea
               value={content}
               onChange={e => setContent(e.target.value)}
@@ -56,6 +53,7 @@ export function CommentDialog(props: CommentDialogProps) {
               className='resize-none h-full'
               />
             </div>
+            <CommentList postId={props.post.id}/>
             <DialogClose asChild>
               <Button onClick={comment}>Submit</Button>
             </DialogClose>
