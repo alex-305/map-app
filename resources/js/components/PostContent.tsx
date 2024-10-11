@@ -5,6 +5,7 @@ import Icon from "@mdi/react"
 import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 import { get } from "../scripts/http"
+import { CommentDialog } from "./CommentDialog"
 
 
 type PostContentProps = {
@@ -12,10 +13,9 @@ type PostContentProps = {
 }
 
 function PostContent(props:PostContentProps) {
-
     const [isLiked, setIsLiked] = useState<boolean>(false)
-
     const [isJustLiked, setJustLiked] = useState<boolean>(false)
+    const [isCommented, setIsCommented] = useState<boolean>(false)
 
     const likePost = async() => {
         const response = await post(`/posts/${props.post.id}/like`)
@@ -64,11 +64,13 @@ function PostContent(props:PostContentProps) {
                     }
                     <span>{props.post.like_count + (isJustLiked ? 1 : 0)}</span>
                 </div>
-                <div 
-                className="cursor-pointer select-none flex flex-row items-center">
-                    <Icon path={mdiCommentOutline} size={1}/>
-                    <span>{props.post.comment_count.toString()}</span>
-                </div>
+                <CommentDialog postId={props.post.id} onComment={() => setIsCommented(true)}>
+                    <div 
+                    className="cursor-pointer select-none flex flex-row items-center">
+                        <Icon path={mdiCommentOutline} size={1}/>
+                        <span>{(props.post.comment_count + (isCommented ? 1 : 0)).toString()}</span>
+                    </div>
+                </CommentDialog>
             </div>
         </div>
     )
