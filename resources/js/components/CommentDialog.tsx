@@ -45,6 +45,7 @@ export function CommentDialog(props: CommentDialogProps) {
                 <DialogDescription>What do you have to say?</DialogDescription>
               </div>
             </DialogHeader>
+            <CommentList authorId={props.post.author_id} postId={props.post.id}/>
             <div className='h-16'>
               <Textarea
               value={content}
@@ -56,7 +57,6 @@ export function CommentDialog(props: CommentDialogProps) {
             <DialogClose asChild>
               <Button onClick={comment}>Post Comment</Button>
             </DialogClose>
-            <CommentList postId={props.post.id}/>
           </DialogContent>
         </Dialog>
       </div>
