@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -11,24 +11,35 @@ import {
 import { Textarea } from './ui/textarea'
 import { post } from '@/scripts/http'
 import { DialogClose } from '@radix-ui/react-dialog'
+import { Post } from "@/types/Post"
 
-export function CommentDialog({ postId, children, onComment }) {
+interface CommentDialogProps {
+  post: Post,
+  onComment: () => void,
+  children: React.ReactNode
+}
+
+export function CommentDialog(props: CommentDialogProps) {
   const [content, setContent] = useState<string>("")
 
   async function comment() {
-    const { errors } = await post(`/posts/${postId}/comments`, { content })
+    const { errors } = await post(`/posts/${props.post.id}/comments`, { content })
     if (!errors) {
-      onComment()
+      props.onComment()
       setContent("")
     }
   }
+
+  useEffect(() => {
+    
+  })
 
   return (
     <>
       <div>
          <Dialog>
           <DialogTrigger asChild>
-            {children}
+            {props.children}
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
