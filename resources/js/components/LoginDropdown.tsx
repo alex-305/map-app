@@ -1,13 +1,6 @@
 import LoginForm from "./LoginForm"
 import { Button } from "./ui/button"
 import { post } from "@/scripts/http"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-    DropdownMenuSeparator
-} from "./ui/dropdown-menu"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { RegisterDialog } from "./RegisterDialog"
 import { Separator } from "./ui/separator"
@@ -20,29 +13,24 @@ export default function LoginDropdown({ loggedIn, onLogin, onLogout }) {
     }
 
     return loggedIn ? (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+        <Popover>
+            <PopoverTrigger asChild>
                 <Button variant="link">Account</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent onCloseAutoFocus={e => e.preventDefault()} className="w-56">
-                <DropdownMenuItem>
-                    Your Posts
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>
-                    Logout
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto flex flex-col gap-4">
+                <div className="flex">
+                    <Button variant="link">Settings</Button>
+                    <Button variant="link">My Posts</Button>
+                </div>
+                <Button onClick={logout}>Logout</Button>
+            </PopoverContent>
+        </Popover>
     ) : (
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant="link">Login</Button>
             </PopoverTrigger>
-            <PopoverContent >
+            <PopoverContent>
                 <LoginForm onLogin={onLogin} />
                 <Separator className="mt-4 mb-2"/>
                 <div>
