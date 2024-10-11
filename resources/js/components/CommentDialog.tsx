@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -53,10 +53,10 @@ export function CommentDialog(props: CommentDialogProps) {
               className='resize-none h-full'
               />
             </div>
-            <CommentList postId={props.post.id}/>
             <DialogClose asChild>
-              <Button onClick={comment}>Submit</Button>
+              <Button onClick={comment}>Post Comment</Button>
             </DialogClose>
+            <CommentList postId={props.post.id}/>
           </DialogContent>
         </Dialog>
       </div>
