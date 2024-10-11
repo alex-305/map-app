@@ -45,7 +45,7 @@ function PostContent(props:PostContentProps) {
     return (
         <div>
             <div>
-                <span className="font-semibold cursor-pointer">{props.post.username}</span>
+                <span className="font-semibold cursor-pointer">Placeholder</span>
             </div>
             <div className="font-normal py-2">{props.post.content}</div>
 
