@@ -77,6 +77,7 @@ export default function RegisterForm({ onRegister }) {
                             <FormControl>
                                 <Input id="password" type="password" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
