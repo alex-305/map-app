@@ -14,8 +14,6 @@ export function RegisterDialog() {
   const [open, setOpen] = useState(false)
 
   const handleRegister = (loginData) => {
-    // Handle successful registration
-    // You might want to update your app's state here
     console.log('User registered:', loginData)
     setOpen(false)
     window.location.reload()
