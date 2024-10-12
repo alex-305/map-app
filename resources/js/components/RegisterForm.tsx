@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { z } from "zod" 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,7 +16,7 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
     name: z.string().min(1, "Invalid username"),
-    email: z.string().email(),
+    email: z.string().email("Please enter a valid and unique email"),
     password: z.string().regex(
         /^(?=.*\d)[A-Za-z\d]{8,}$/,
         "Password must be at least 8 characters long and include at least one number"
@@ -23,6 +24,8 @@ const formSchema = z.object({
 })
 
 export default function RegisterForm({ onRegister }) {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -33,10 +36,31 @@ export default function RegisterForm({ onRegister }) {
     })
 
     async function register(values: z.infer<typeof formSchema>) {
-        const { data, errors } = await post("/register", values)
+        setIsSubmitting(true);
+        setError(null);
+        try {
+            const registerResponse = await post("/register", values);
+            if (registerResponse.errors) {
+                throw new Error(registerResponse.errors.message || "Registration failed");
+            }
 
-        if (!errors)
-          console.log("Success")
+            const loginData = {
+                email: values.email,
+                password: values.password
+            };
+            const loginInfo = await post("/login", loginData);
+            if (loginInfo.errors) {
+                throw new Error(loginInfo.errors.message || "Login failed");
+            }
+
+            // Success
+            onRegister(loginInfo.data);
+        } catch (err) {
+            setError(err.message || "An unexpected error occurred");
+        } finally {
+            setIsSubmitting(false);
+        }
+
     }
 
     return (
@@ -81,7 +105,9 @@ export default function RegisterForm({ onRegister }) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Registering...' : 'Register'}
+                </Button>
             </form>
         </Form>
     )

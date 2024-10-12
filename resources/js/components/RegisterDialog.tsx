@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -10,24 +11,28 @@ import {
 import RegisterForm from './RegisterForm'
 
 export function RegisterDialog() {
+  const [open, setOpen] = useState(false)
+
+  const handleRegister = (loginData) => {
+    // Handle successful registration
+    // You might want to update your app's state here
+    console.log('User registered:', loginData)
+    setOpen(false)
+    window.location.reload()
+  }
+
   return (
-    <>
-      <div>
-         <Dialog>
-          <DialogTrigger asChild>
-            <Button className={"m-0 pl-0 px-2 hover:bg-slate-200 dark:hover:bg-slate-500 rounded-r-none"} variant='link'>Register</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <div>
-                <DialogTitle>Register</DialogTitle>
-                <DialogDescription>Make a new account today!</DialogDescription>
-              </div>
-            </DialogHeader>
-            <RegisterForm onRegister={() => {}}/>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="m-0 pl-0 px-2 hover:bg-slate-200 dark:hover:bg-slate-500 rounded-r-none" variant='link'> Register </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Register</DialogTitle>
+          <DialogDescription>Make a new account today!</DialogDescription>
+        </DialogHeader>
+        <RegisterForm onRegister={handleRegister}/>
+      </DialogContent>
+    </Dialog>
   )
 }
