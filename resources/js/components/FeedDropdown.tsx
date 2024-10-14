@@ -12,7 +12,7 @@ export default function FeedDropdown() {
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <Button variant="link">Feeds</Button>
+            <Button className='rounded-none' variant="ghost">Feeds</Button>
         </PopoverTrigger>
         <PopoverContent className="ml-4 w-32">
             <RadioGroup

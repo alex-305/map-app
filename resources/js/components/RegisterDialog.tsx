@@ -22,7 +22,7 @@ export function RegisterDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="m-0 pl-0 px-2 hover:bg-slate-200 dark:hover:bg-slate-500 rounded-r-none" variant='link'> Register </Button>
+        <Button variant='ghost'> Register </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

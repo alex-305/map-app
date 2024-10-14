@@ -18,7 +18,7 @@ export default function LoginDropdown({ onLogin, onLogout }) {
     return loggedIn ? (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="link">Account</Button>
+                <Button className='rounded-none' variant="ghost">Account</Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto flex flex-col gap-4">
                 <div className="flex">
@@ -31,14 +31,14 @@ export default function LoginDropdown({ onLogin, onLogout }) {
     ) : (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="link">Login</Button>
+                <Button className='rounded-none' variant="ghost">Login</Button>
             </PopoverTrigger>
             <PopoverContent>
                 <LoginForm onLogin={onLogin} />
                 <Separator className="mt-4 mb-2"/>
                 <div>
                     <RegisterDialog />
-                    <Button variant="link">Forgot password?</Button>
+                    <Button variant="ghost">Forgot password?</Button>
                 </div>
             </PopoverContent>
         </Popover>

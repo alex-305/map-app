@@ -25,7 +25,6 @@ const formSchema = z.object({
 
 export default function RegisterForm({ onRegister }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -37,11 +36,9 @@ export default function RegisterForm({ onRegister }) {
 
     async function register(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true);
-        setError(null);
-        try {
             const registerResponse = await post("/register", values);
             if (registerResponse.errors) {
-                throw new Error(registerResponse.errors.message || "Registration failed");
+                console.log("Registration failed");
             }
 
             const loginData = {
@@ -50,17 +47,13 @@ export default function RegisterForm({ onRegister }) {
             };
             const loginInfo = await post("/login", loginData);
             if (loginInfo.errors) {
-                throw new Error(loginInfo.errors.message || "Login failed");
+                console.log("Login failed");
             }
 
-            // Success
-            onRegister(loginInfo.data);
-        } catch (err) {
-            setError(err.message || "An unexpected error occurred");
-        } finally {
-            setIsSubmitting(false);
-        }
-
+            if(!loginInfo.errors && !registerResponse.errors) {
+                onRegister(loginInfo.data);
+            }
+        setIsSubmitting(false);
     }
 
     return (
