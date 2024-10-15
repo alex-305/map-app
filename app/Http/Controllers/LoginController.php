@@ -10,10 +10,24 @@ use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller {
     public function register(Request $request) {
         $validatedData = $request->validate([
-            'username' => ['required'],
+            'username' => ['required', 'string', 'min:3', 'max:20'],
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
+
+        $existingUser = User::where('email', $validatedData['email'])
+                            ->orWhere('username', $validatedData['username'])
+                            ->first();
+
+        if($existingUser) {
+            if($existingUser->email === $validatedData['email']) {
+                return response()->json(['message' => 'An account with this email already exists.'], 409);
+            }
+
+            if($existingUser->username === $validatedData['username']) {
+                return response()->json(['message' => 'This username is already in use.'], 409);
+            }
+        }
 
         $user = User::create([
             'username' => $validatedData['username'],
@@ -22,6 +36,7 @@ class LoginController extends Controller {
         ]);
 
         Auth::login($user);
+
         return response()->json(['message'=> 'User successfully registered an account.'], 200);
     }
 

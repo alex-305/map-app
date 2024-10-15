@@ -19,10 +19,14 @@ const formSchema = z.object({
     password: z.string().regex(
         /^(?=.*\d)[A-Za-z\d]{8,}$/,
         "Password must be at least 8 characters long and include at least one number"
-    )
+    ),
+    confirmPassword: z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: "Passwords do not match"
 })
 
-export default function RegisterForm({ onRegister }) {
+export default function RegisterForm({ onRegister, onError }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -33,10 +37,14 @@ export default function RegisterForm({ onRegister }) {
     })
 
     async function register(values: z.infer<typeof formSchema>) {
-        const { data, errors } = await post("/register", values)
+        const { data, error } = await post("/register", values)
 
-        if (!errors)
+        if (!error) {
           console.log("Success")
+          onRegister()
+        } else {
+          onError(error)
+        }
     }
 
     return (
@@ -77,6 +85,20 @@ export default function RegisterForm({ onRegister }) {
                             <FormControl>
                                 <Input id="password" type="password" {...field} />
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Retype password</FormLabel>
+                            <FormControl>
+                                <Input id="confirmPassword" type="password" {...field} />
+                            </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />

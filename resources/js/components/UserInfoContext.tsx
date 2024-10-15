@@ -7,6 +7,7 @@ const UserInfoContext = createContext<{
     userLocation: LatLng,
     loggedIn: boolean,
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+    checkLoggedin: () => Promise<void>
 } | null>(null)
 
 export const useUserInfo = () => useContext(UserInfoContext)
@@ -19,11 +20,13 @@ export function UserInfoProvider({ children }: UserInfoProviderProps) {
     const [userLocation, setUserLocation] = useState<LatLng | null>(null)
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
 
+    const checkLoggedin = async() => {
+        const result = (await get('/check')).data.result
+        setLoggedIn(result);
+    }
+
     useEffect(() => {
-        (async () => {
-            const result = (await get('/check')).data.result
-            setLoggedIn(result);
-        })()
+        checkLoggedin()
     }, [])
 
     const map = useMap()
@@ -35,7 +38,7 @@ export function UserInfoProvider({ children }: UserInfoProviderProps) {
     }, [map])
 
     return (
-        <UserInfoContext.Provider value={{ userLocation, loggedIn, setLoggedIn }}>
+        <UserInfoContext.Provider value={{ userLocation, loggedIn, setLoggedIn, checkLoggedin }}>
             {children}
         </UserInfoContext.Provider>
     )

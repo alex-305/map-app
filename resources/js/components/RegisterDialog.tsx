@@ -8,12 +8,30 @@ import {
   DialogTrigger
 } from './ui/dialog'
 import RegisterForm from './RegisterForm'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { HTTPError } from '@/scripts/http'
 
 export function RegisterDialog() {
+
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+
+  const userRegistered = () => {
+    setDialogOpen(false)
+    toast.success('Registration successful. Welcome!')
+  }
+
+  const registerError = (error:HTTPError) => {
+    toast.error(`Error: Request failed with status ${error.status}`, {
+      description: error.message,
+      duration: 10000
+    })
+  }
+
   return (
     <>
       <div>
-         <Dialog>
+         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button variant='link'>Register</Button>
           </DialogTrigger>
@@ -24,7 +42,7 @@ export function RegisterDialog() {
                 <DialogDescription>Make a new account today!</DialogDescription>
               </div>
             </DialogHeader>
-            <RegisterForm onRegister={() => {}}/>
+            <RegisterForm onRegister={userRegistered} onError={registerError}/>
           </DialogContent>
         </Dialog>
       </div>
