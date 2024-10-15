@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-    name: z.string().min(1, "Invalid username"),
+    username: z.string().min(1, "Invalid username"),
     email: z.string().email("Please enter a valid and unique email"),
     password: z.string().regex(
         /^(?=.*\d)[A-Za-z\d]{8,}$/,
@@ -28,7 +28,7 @@ export default function RegisterForm({ onRegister }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            username: "",
             email: "",
             password: "",
         },
@@ -61,7 +61,7 @@ export default function RegisterForm({ onRegister }) {
             <form onSubmit={form.handleSubmit(register)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="name"
+                    name="username"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Username</FormLabel>

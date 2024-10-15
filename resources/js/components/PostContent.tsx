@@ -3,19 +3,17 @@ import { Post } from "@/types/Post"
 import { mdiHeart, mdiHeartOutline, mdiCommentOutline } from "@mdi/js"
 import Icon from "@mdi/react"
 import { useEffect, useState } from "react"
-import { Button } from "./ui/button"
 import { get } from "../scripts/http"
-
+import { CommentDialog } from "./CommentDialog"
 
 type PostContentProps = {
     post:Post
 }
 
 function PostContent(props:PostContentProps) {
-
     const [isLiked, setIsLiked] = useState<boolean>(false)
-
     const [isJustLiked, setJustLiked] = useState<boolean>(false)
+    const [timesCommented, setTimesCommented] = useState<number>(0)
 
     const likePost = async() => {
         const response = await post(`/posts/${props.post.id}/like`)
@@ -47,7 +45,7 @@ function PostContent(props:PostContentProps) {
     return (
         <div>
             <div>
-                <span className="font-semibold cursor-pointer">{props.post.username}</span>
+                <span className="font-semibold cursor-pointer">Placeholder</span>
             </div>
             <div className="font-normal py-2">{props.post.content}</div>
 
@@ -64,11 +62,13 @@ function PostContent(props:PostContentProps) {
                     }
                     <span>{props.post.like_count + (isJustLiked ? 1 : 0)}</span>
                 </div>
-                <div 
-                className="cursor-pointer select-none flex flex-row items-center">
-                    <Icon path={mdiCommentOutline} size={1}/>
-                    <span>{props.post.comment_count.toString()}</span>
-                </div>
+                <CommentDialog post={props.post} onComment={() => setTimesCommented(timesCommented + 1)}>
+                    <div 
+                    className="cursor-pointer select-none flex flex-row items-center">
+                        <Icon path={mdiCommentOutline} size={1}/>
+                        <span>{(props.post.comment_count + timesCommented).toString()}</span>
+                    </div>
+                </CommentDialog>
             </div>
         </div>
     )
