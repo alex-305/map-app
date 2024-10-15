@@ -16,14 +16,15 @@ class CommentController extends Controller
 
         $post = Post::findOrFail($postId);  // look for post id
 
-        DB::transaction(function () use ($post) {
+        $comment = null;
+
+        DB::transaction(function () use ($post, $validatedData, &$comment) {
+            $comment = $post->comments()->create([
+                'author_id' => 1,               // TODO: Replace with AUTH(user)
+                'content' => $validatedData['content'],
+            ]);
             $post->increment('comment_count');
         });
-
-        $comment = $post->comments()->create([
-            'author_id' => 1,               // TODO: Replace with AUTH(user)
-            'content' => $validatedData['content'],
-        ]);
 
         return response()->json($comment, 201);
     }
@@ -34,11 +35,10 @@ class CommentController extends Controller
             ->where('author_id', 1)  // TODO: Replace with AUTH(user)
             ->firstOrFail();
 
-        $comment->delete();
-
         $post = Post::findOrFail($postId);  // look for post id
 
-        DB::transaction(function () use ($post) {
+        DB::transaction(function () use ($post, $comment) {
+            $comment->delete();
             $post->decrement('comment_count');
         });
 
