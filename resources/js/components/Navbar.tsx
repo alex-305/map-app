@@ -40,9 +40,9 @@ function Navbar() {
     }
 
     return loggedIn !== null ? (
-        <nav className="flex flex-row bg-white rounded-lg shadow">
+        <nav className="flex flex-row bg-white dark:bg-black rounded-lg shadow">
             <Tracker/>
-            <Button className={"m-0 pl-0 px-2 hover:bg-slate-200 rounded-r-none"} onClick={homeClicked} variant={"link"}>
+            <Button className={"m-0 pl-0 px-2 rounded-r-none"} onClick={homeClicked} variant={"ghost"}>
                 <Icon path={mdiHome} size={1}/>
             </Button>
 
@@ -60,18 +60,16 @@ function Navbar() {
 
             <Button 
             onClick={zoomOut} 
-            variant={"link"} 
-            className={"p-0 rounded-none " + 
-            (reachedMinZoom ? "cursor-default" : "cursor-pointer hover:bg-slate-200")}>
-                <Icon color={reachedMinZoom ? "gray" : "black" } path={mdiMinus} size={1}/>
+            variant={"ghost"} 
+            className={"p-0 rounded-none"}>
+                <Icon className={reachedMinZoom ? "cursor-default text-gray-500" : "cursor-pointer text-black dark:text-white"} path={mdiMinus} size={1}/>
             </Button>
 
             <Button 
             onClick={zoomIn}
-            variant={"link"} 
-            className={"p-0 rounded-l-none " +
-            (reachedMaxZoom ? "cursor-default" : "cursor-pointer hover:bg-slate-200")}>
-                <Icon color={reachedMaxZoom ? "gray" : "black"} path={mdiPlus} size={1}/>
+            variant={"ghost"} 
+            className={"p-0 rounded-l-none"}>
+                <Icon className={reachedMaxZoom ? "cursor-default text-gray-500" : "cursor-pointer text-black dark:text-white"} path={mdiPlus} size={1}/>
             </Button>
         </nav>
     ) : <></>

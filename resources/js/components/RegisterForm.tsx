@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { z } from "zod" 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,7 +16,7 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
     username: z.string().min(1, "Invalid username"),
-    email: z.string().email(),
+    email: z.string().email("Please enter a valid and unique email"),
     password: z.string().regex(
         /^(?=.*\d)[A-Za-z\d]{8,}$/,
         "Password must be at least 8 characters long and include at least one number"
@@ -23,6 +24,7 @@ const formSchema = z.object({
 })
 
 export default function RegisterForm({ onRegister }) {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -33,10 +35,25 @@ export default function RegisterForm({ onRegister }) {
     })
 
     async function register(values: z.infer<typeof formSchema>) {
-        const { data, errors } = await post("/register", values)
+        setIsSubmitting(true);
+            const registerResponse = await post("/register", values);
+            if (registerResponse.errors) {
+                console.log("Registration failed");
+            }
 
-        if (!errors)
-          console.log("Success")
+            const loginData = {
+                email: values.email,
+                password: values.password
+            };
+            const loginInfo = await post("/login", loginData);
+            if (loginInfo.errors) {
+                console.log("Login failed");
+            }
+
+            if(!loginInfo.errors && !registerResponse.errors) {
+                onRegister(loginInfo.data);
+            }
+        setIsSubmitting(false);
     }
 
     return (
@@ -77,10 +94,13 @@ export default function RegisterForm({ onRegister }) {
                             <FormControl>
                                 <Input id="password" type="password" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Registering...' : 'Register'}
+                </Button>
             </form>
         </Form>
     )
