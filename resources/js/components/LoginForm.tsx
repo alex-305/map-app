@@ -14,21 +14,31 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string()
+    identifier: z.string().min(1, "Username or email is required"),
+    password: z.string().min(1, "Password is required"),
 })
 
 export default function LoginForm({ onLogin }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "",
+            identifier: "",
             password: "",
         },
     })
+    
 
     async function login(values: z.infer<typeof formSchema>) {
-        const { errors } = await post('/login', values)
+
+        const isEmail = z.string().email().safeParse(values.identifier).success
+
+        const loginData = isEmail 
+        ? {email: values.identifier}
+        : {username: values.identifier}
+
+        loginData["password"] = values.password
+
+        const { errors } = await post('/login', loginData)
         if (!errors)
             onLogin()
     }
@@ -38,12 +48,12 @@ export default function LoginForm({ onLogin }) {
             <form onSubmit={form.handleSubmit(login)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="email"
+                    name="identifier"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            {/* <FormLabel>Email</FormLabel> */}
                             <FormControl>
-                                <Input id="email" placeholder="hello@mail.com" {...field} />
+                                <Input id="identifier" placeholder="Username or Email" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -54,15 +64,15 @@ export default function LoginForm({ onLogin }) {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            {/* <FormLabel>Password</FormLabel> */}
                             <FormControl>
-                                <Input id="password" type="password" {...field} />
+                                <Input id="password" placeholder="Password" type="password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button className="flex justify-end" type="submit">Login</Button>
             </form>
         </Form>
     )

@@ -27,9 +27,18 @@ class LoginController extends Controller {
 
     public function login(Request $request) {
         $validatedData = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['nullable', 'email', 'required_without:username'],
+            'username' => ['nullable', 'string', 'required_without:email'],
             'password' => ['required']
         ]);
+
+        $creds = [ 'password' => $validatedData['password']];
+
+        if(!empty($validatedData['email'])) {
+            $creds['email'] = $validatedData['email'];
+        } else {
+            $creds['username'] = $validatedData['username'];
+        }
 
         if (Auth::attempt($validatedData)) {
             $request->session()->regenerate();
