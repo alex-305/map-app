@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,4 +33,8 @@ Route::controller(CommentController::class)->group(function () {
     Route::get('/posts/{post}/comments', 'index');
     Route::post('/posts/{post}/comments', 'store')->middleware('auth');
     Route::delete('/posts/{post}/comments/{comment}', 'destroy')->middleware('auth');
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users/{user}', 'show');
 });
