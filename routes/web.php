@@ -29,6 +29,7 @@ Route::controller(LikeController::class)->group(function () {
 });
 
 Route::controller(CommentController::class)->group(function () {
+    Route::get('/posts/{post}/comments', 'index');
     Route::post('/posts/{post}/comments', 'store')->middleware('auth');
     Route::delete('/posts/{post}/comments/{comment}', 'destroy')->middleware('auth');
 });

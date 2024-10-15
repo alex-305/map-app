@@ -5,6 +5,7 @@ use App\Models\Comment;
 use App\Models\Post;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -14,10 +15,16 @@ class CommentController extends Controller
         ]);
 
         $post = Post::findOrFail($postId);  // look for post id
-        $comment = $post->comments()->create([
-            'author_id' => 1,               // TODO: Replace with AUTH(user)
-            'content' => $validatedData['content'],
-        ]);
+
+        $comment = null;
+
+        DB::transaction(function () use ($post, $validatedData, &$comment) {
+            $comment = $post->comments()->create([
+                'author_id' => 1,               // TODO: Replace with AUTH(user)
+                'content' => $validatedData['content'],
+            ]);
+            $post->increment('comment_count');
+        });
 
         return response()->json($comment, 201);
     }
@@ -28,8 +35,20 @@ class CommentController extends Controller
             ->where('author_id', 1)  // TODO: Replace with AUTH(user)
             ->firstOrFail();
 
-        $comment->delete();
+        $post = Post::findOrFail($postId);  // look for post id
+
+        DB::transaction(function () use ($post, $comment) {
+            $comment->delete();
+            $post->decrement('comment_count');
+        });
 
         return response()->json(null, 204);
     }
+
+    public function index($postId){
+        $comments = Comment::where('post_id', $postId)->get();
+
+        return response()->json($comments, 201);
+    }
+
 }
