@@ -55,7 +55,7 @@ class LoginController extends Controller {
             $creds['username'] = $validatedData['username'];
         }
 
-        if (Auth::attempt($validatedData)) {
+        if (Auth::attempt($creds)) {
             $request->session()->regenerate();
 
             return response()->json(status: 200);
