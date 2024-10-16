@@ -22,9 +22,9 @@ export function RegisterDialog() {
   }
 
   const registerError = (error:HTTPError) => {
-    toast.error(`Error: Request failed with status ${error.status}`, {
-      description: error.message,
-      duration: 10000
+    toast.error(error.message, {
+      description: `Error: Request failed with status ${error.status}`,
+      duration: 2000
     })
   }
 

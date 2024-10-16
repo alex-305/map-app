@@ -51,7 +51,6 @@ export default function LoginForm({ onLogin }) {
                     name="identifier"
                     render={({ field }) => (
                         <FormItem>
-                            {/* <FormLabel>Email</FormLabel> */}
                             <FormControl>
                                 <Input id="identifier" placeholder="Username or Email" {...field} />
                             </FormControl>
@@ -64,7 +63,6 @@ export default function LoginForm({ onLogin }) {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            {/* <FormLabel>Password</FormLabel> */}
                             <FormControl>
                                 <Input id="password" placeholder="Password" type="password" {...field} />
                             </FormControl>

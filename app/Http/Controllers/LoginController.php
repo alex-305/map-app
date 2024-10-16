@@ -49,10 +49,25 @@ class LoginController extends Controller {
 
         $creds = [ 'password' => $validatedData['password']];
 
+        $user = null;
+        $identifier = '';
+
         if(!empty($validatedData['email'])) {
+            $identifier = 'email';
+            $user = User::where($identifier, $validatedData['email'])->first();
             $creds['email'] = $validatedData['email'];
         } else {
+            $identifier = 'username';
+            $user = User::where($identifier, $validatedData['username'])->first();
             $creds['username'] = $validatedData['username'];
+        }
+
+        if(!$user) {
+            return response()->json(['message' => 'User with the specified ' + $identifier +' does not exist.'], 401);
+        }
+
+        if(Hash::check($validatedData['password'], $user->password)) {
+            return response()->json(['message' => 'Incorrect password.'], 401);
         }
 
         if (Auth::attempt($creds)) {
@@ -61,14 +76,14 @@ class LoginController extends Controller {
             return response()->json(status: 200);
         }
 
-        return response()->json(status: 401);
+        return response()->json(['message' => 'Login successful.'], 401);
     }
 
     public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return response()->json(['success' => true]);
+        return response()->json(['Logout sucessful.' => true]);
     }
 
     public function isLoggedIn() {

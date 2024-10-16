@@ -4,7 +4,7 @@ export default function RootLayout({ children }) {
   return (
     <>
         <main>{children}</main>
-        <Toaster position="top-right" />
+        <Toaster position="top-right" richColors/>
     </>
   )
 }

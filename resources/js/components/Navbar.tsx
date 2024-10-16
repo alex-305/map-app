@@ -6,6 +6,7 @@ import LoginDropdown from "./LoginDropdown"
 import { useState } from "react"
 import FeedDropdown from "./FeedDropdown"
 import { useUserInfo } from "./UserInfoContext"
+import { toast } from "sonner"
 
 function Navbar() {
     const map = useMap()
@@ -50,10 +51,12 @@ function Navbar() {
             <LoginDropdown
             onLogin={() => {
                 setLoggedIn(true)
+                toast.success('Sucessfully logged in.')
                 location.reload() // TODO try to find a way to avoid this
             }}
             onLogout={() => {
                 setLoggedIn(false)
+                toast.success('Sucessfully logged out.')
                 location.reload() // TODO this too
             }}
             />
