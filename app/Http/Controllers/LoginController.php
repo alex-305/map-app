@@ -10,24 +10,10 @@ use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller {
     public function register(Request $request) {
         $validatedData = $request->validate([
-            'username' => ['required', 'string', 'min:3', 'max:20'],
-            'email' => ['required', 'email'],
+            'username' => ['required', 'string', 'min:3', 'max:20', 'unique:users,username'],
+            'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required']
         ]);
-
-        $existingUser = User::where('email', $validatedData['email'])
-                            ->orWhere('username', $validatedData['username'])
-                            ->first();
-
-        if($existingUser) {
-            if($existingUser->email === $validatedData['email']) {
-                return response()->json(['message' => 'An account with this email already exists.'], 409);
-            }
-
-            if($existingUser->username === $validatedData['username']) {
-                return response()->json(['message' => 'This username is already in use.'], 409);
-            }
-        }
 
         $user = User::create([
             'username' => $validatedData['username'],
@@ -42,41 +28,29 @@ class LoginController extends Controller {
 
     public function login(Request $request) {
         $validatedData = $request->validate([
-            'email' => ['nullable', 'email', 'required_without:username'],
-            'username' => ['nullable', 'string', 'required_without:email'],
-            'password' => ['required']
+            'email' => ['nullable', 'email', 'exists:users,email', 'required_without:username'],
+            'username' => ['nullable', 'string', 'exists:users,username', 'required_without:email'],
+            'password' => ['string', 'required']
         ]);
 
-        $creds = [ 'password' => $validatedData['password']];
+
+        $creds['password'] = $validatedData['password'];
+
+        if (!empty($validatedData['email'])) {
+            $creds['email'] = $validatedData['email'];
+        } else {
+            $creds['username'] = $validatedData['username'];
+        }
 
         $user = null;
         $identifier = '';
 
-        if(!empty($validatedData['email'])) {
-            $identifier = 'email';
-            $user = User::where($identifier, $validatedData['email'])->first();
-            $creds['email'] = $validatedData['email'];
-        } else {
-            $identifier = 'username';
-            $user = User::where($identifier, $validatedData['username'])->first();
-            $creds['username'] = $validatedData['username'];
-        }
-
-        if(!$user) {
-            return response()->json(['message' => 'User with the specified ' + $identifier +' does not exist.'], 401);
-        }
-
-        if(Hash::check($validatedData['password'], $user->password)) {
-            return response()->json(['message' => 'Incorrect password.'], 401);
-        }
-
         if (Auth::attempt($creds)) {
             $request->session()->regenerate();
-
-            return response()->json(status: 200);
+            return response()->json(['message' => 'Login successful.'], 200);
         }
 
-        return response()->json(['message' => 'Login successful.'], 401);
+        return response()->json(['message' => 'Incorrect credentials'], 401);
     }
 
     public function logout(Request $request) {

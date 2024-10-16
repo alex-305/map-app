@@ -42,6 +42,7 @@ Promise<{data: any, error: HTTPError | null, status: number}>
 
   if(payload && ['POST', 'PUT', 'PATCH'].includes(req_type)) {
     requestOptions['body'] = JSON.stringify(payload)
+    console.log(payload)
   }
 
   const res = await fetch(url, requestOptions)

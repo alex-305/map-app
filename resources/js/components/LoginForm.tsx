@@ -12,6 +12,9 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { toast } from "sonner"
+import { ErrorToast } from '@/scripts/toast'
+import { error } from "console"
 
 const formSchema = z.object({
     identifier: z.string().min(1, "Username or email is required"),
@@ -38,9 +41,11 @@ export default function LoginForm({ onLogin }) {
 
         loginData["password"] = values.password
 
-        const { errors } = await post('/login', loginData)
-        if (!errors)
+        const { error } = await post('/login', loginData)
+        if (!error)
             onLogin()
+        else
+            ErrorToast(error.message, error.status)
     }
 
     return (

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { z } from "zod" 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,7 +16,7 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
     username: z.string().min(1, "Invalid username"),
-    email: z.string().email(),
+    email: z.string().email("Please enter a valid and unique email"),
     password: z.string().regex(
         /^(?=.*\d)[A-Za-z\d]{8,}$/,
         "Password must be at least 8 characters long and include at least one number"
@@ -33,6 +34,7 @@ export default function RegisterForm({ onRegister, onError }) {
             username: "",
             email: "",
             password: "",
+            confirmPassword: "",
         },
     })
 
@@ -40,7 +42,6 @@ export default function RegisterForm({ onRegister, onError }) {
         const { data, error } = await post("/register", values)
 
         if (!error) {
-          console.log("Success")
           onRegister()
         } else {
           onError(error)
@@ -94,9 +95,9 @@ export default function RegisterForm({ onRegister, onError }) {
                     name="confirmPassword"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Retype password</FormLabel>
+                            <FormLabel>Confirm password</FormLabel>
                             <FormControl>
-                                <Input id="confirmPassword" type="password" {...field} />
+                                <Input id="confirmPassword" placeholder='Retype password' type="password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

@@ -7,6 +7,8 @@ import { useState } from "react"
 import FeedDropdown from "./FeedDropdown"
 import { useUserInfo } from "./UserInfoContext"
 import { toast } from "sonner"
+import { HTTPError } from "@/scripts/http"
+import { ErrorToast } from '@/scripts/toast'
 
 function Navbar() {
     const map = useMap()
@@ -41,40 +43,27 @@ function Navbar() {
     }
 
     return loggedIn !== null ? (
-        <nav className="flex flex-row bg-white rounded-lg shadow">
+        <nav className="flex flex-row bg-white dark:bg-black rounded-lg shadow">
             <Tracker/>
-            <Button className={"m-0 pl-0 px-2 hover:bg-slate-200 rounded-r-none"} onClick={homeClicked} variant={"link"}>
+            <Button className={"m-0 pl-0 px-2 rounded-r-none"} onClick={homeClicked} variant={"ghost"}>
                 <Icon path={mdiHome} size={1}/>
             </Button>
 
             <FeedDropdown />            
-            <LoginDropdown
-            onLogin={() => {
-                setLoggedIn(true)
-                toast.success('Sucessfully logged in.')
-                location.reload() // TODO try to find a way to avoid this
-            }}
-            onLogout={() => {
-                setLoggedIn(false)
-                toast.success('Sucessfully logged out.')
-                location.reload() // TODO this too
-            }}
-            />
+            <LoginDropdown/>
 
             <Button 
             onClick={zoomOut} 
-            variant={"link"} 
-            className={"p-0 rounded-none " + 
-            (reachedMinZoom ? "cursor-default" : "cursor-pointer hover:bg-slate-200")}>
-                <Icon color={reachedMinZoom ? "gray" : "black" } path={mdiMinus} size={1}/>
+            variant={"ghost"} 
+            className={"p-0 rounded-none"}>
+                <Icon className={reachedMinZoom ? "cursor-default text-gray-500" : "cursor-pointer text-black dark:text-white"} path={mdiMinus} size={1}/>
             </Button>
 
             <Button 
             onClick={zoomIn}
-            variant={"link"} 
-            className={"p-0 rounded-l-none " +
-            (reachedMaxZoom ? "cursor-default" : "cursor-pointer hover:bg-slate-200")}>
-                <Icon color={reachedMaxZoom ? "gray" : "black"} path={mdiPlus} size={1}/>
+            variant={"ghost"} 
+            className={"p-0 rounded-l-none"}>
+                <Icon className={reachedMaxZoom ? "cursor-default text-gray-500" : "cursor-pointer text-black dark:text-white"} path={mdiPlus} size={1}/>
             </Button>
         </nav>
     ) : <></>

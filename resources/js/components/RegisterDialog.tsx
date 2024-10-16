@@ -1,3 +1,4 @@
+import { useContext, useState } from 'react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -8,24 +9,25 @@ import {
   DialogTrigger
 } from './ui/dialog'
 import RegisterForm from './RegisterForm'
-import { useState } from 'react'
 import { toast } from 'sonner'
 import { HTTPError } from '@/scripts/http'
+import { useUserInfo } from './UserInfoContext'
+import { ErrorToast } from '@/scripts/toast'
 
 export function RegisterDialog() {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
+  const { userLocation, loggedIn, setLoggedIn }= useUserInfo()
+
   const userRegistered = () => {
     setDialogOpen(false)
+    setLoggedIn(true)
     toast.success('Registration successful. Welcome!')
   }
 
   const registerError = (error:HTTPError) => {
-    toast.error(error.message, {
-      description: `Error: Request failed with status ${error.status}`,
-      duration: 2000
-    })
+    ErrorToast(error.message, error.status)
   }
 
   return (
