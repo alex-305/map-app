@@ -14,7 +14,10 @@ class CommentController extends Controller
     
         Gate::authorize('index', Comment::class);
     
-        $comments = Comment::where('post_id', $postId)->get();
+        $comments = Comment::where('post_id', $postId)
+        ->join('users', 'comments.author_id', '=', 'users.id')
+        ->select('comments.*','users.username')
+        ->get();
     
         return response()->json($comments, 201);
     }

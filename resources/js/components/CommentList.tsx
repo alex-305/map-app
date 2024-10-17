@@ -1,6 +1,6 @@
 import { get } from "@/scripts/http";
 import { useEffect, useState } from "react";
-import { Comment } from "@/types/Post";
+import { Comment } from "@/types/Comment";
 import { ScrollArea } from "./ui/scroll-area";
 
 export default function CommentList({ authorId, postId }) {
@@ -27,7 +27,9 @@ export default function CommentList({ authorId, postId }) {
                   <span className="text-gray-500 font-mono text-sm">OP</span>
                 )}
               </div>
-              <span className="text-xs text-gray-500">posted on {(new Date(c.created_at)).toLocaleDateString('en-US')}</span>
+              <span className="text-xs text-gray-500">posted by <span className="font-semibold">
+                {c.username}
+                </span> on {(new Date(c.created_at)).toLocaleDateString('en-US')}</span>
             </div>
           )
         })}
