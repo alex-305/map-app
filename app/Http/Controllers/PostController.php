@@ -13,6 +13,11 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
+
+        if ($request->user()->cannot('index', Post::class)) {
+            return response()->json(['message' => 'You do not have permission to view this resource'],403);
+        }
+
         $request->validate([
             'min_lat' => 'required|numeric',
             'max_lat' => 'required|numeric',
@@ -40,6 +45,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
+        if ($request->user()->cannot('store', Post::class)) {
+            return response()->json(['message' => 'You do not have permission to create this resource'],403);
+        }
+
         $validatedData = $request->validate([
             'content' => 'required|string',
             'latitude' => 'required|numeric',
@@ -57,8 +67,12 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
+        if ($request->user()->cannot('show', Post::class)) {
+            return response()->json(['message' => 'You do not have permission to view this resource'],403);
+        }
+
         $post = Post::where($id)
         ->join('users', 'posts.author_id', '=', 'users.id')
         ->select('posts.*', 'users.username')
@@ -72,10 +86,13 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if ($request->user()->cannot('update', Post::class)) {
+            return response()->json(['message' => 'You do not have permission to update this resource'],403);
+        }
+
         $post = Post::findOrFail($id);
 
         $validatedData = $request->validate([
-            'author_id' => 'required|integer',
             'content' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
@@ -89,8 +106,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        if ($request->user()->cannot('destroy', Post::class)) {
+            return response()->json(['message' => 'You do not have permission to delete this resource'],403);
+        }
+
         $post = Post::findOrFail($id);
 
         $post->delete();
