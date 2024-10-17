@@ -6,14 +6,21 @@ use App\Models\Post;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
+    public function index(Request $request, $postId){
+    
+        Gate::authorize('index', Comment::class);
+    
+        $comments = Comment::where('post_id', $postId)->get();
+    
+        return response()->json($comments, 201);
+    }
     public function store(Request $request, $postId){
 
-        if ($request->user()->cannot('store', Comment::class)) {
-            return response()->json(['message' => 'You do not have permission to create this resource'],403);
-        }
+        Gate::authorize('store', Comment::class);
 
         $validatedData = $request->validate([
             'content' => 'required|string',
@@ -34,12 +41,9 @@ class CommentController extends Controller
 
         return response()->json(['message' => 'Successfully left a comment.'], 201);
     }
-
     public function destroy(Request $request, $commentId){
 
-        if ($request->user()->cannot('destroy', Comment::class)) {
-            return response()->json(['message' => 'You do not have permission to delete this resource'],403);
-        }
+        Gate::authorize('destroy', Comment::class);
 
         $comment = Comment::findOrFail($commentId);
 
@@ -52,16 +56,4 @@ class CommentController extends Controller
 
         return response()->json(null, 204);
     }
-
-    public function index(Request $request, $postId){
-
-        if ($request->user()->cannot('index', Comment::class)) {
-            return response()->json(['message' => 'You do not have permission to view this resource'],403);
-        }
-
-        $comments = Comment::where('post_id', $postId)->get();
-
-        return response()->json($comments, 201);
-    }
-
 }

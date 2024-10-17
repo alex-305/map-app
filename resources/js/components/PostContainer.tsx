@@ -4,6 +4,7 @@ import type { Post } from "@/types/Post"
 import { useEffect, useState } from "react"
 import { useMap } from "react-leaflet"
 import { get } from '../scripts/http'
+import { ErrorToast } from "@/scripts/toast"
 
 function PostContainer() {
 
@@ -23,9 +24,14 @@ function PostContainer() {
             const maxLng = bounds.getNorthEast().lng
 
 
-            const response = await get(`/posts?min_lat=${minLat}&min_lng=${minLng}&max_lat=${maxLat}&max_lng=${maxLng}`)
+            const {data, error} = await get(`/posts?min_lat=${minLat}&min_lng=${minLng}&max_lat=${maxLat}&max_lng=${maxLng}`)
 
-            setPosts(response.data as Post[] || [])
+
+            if(!error) {
+                setPosts(data as Post[] || [])
+            } else {
+                ErrorToast(error.message, error.status)
+            }
             
         }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -14,9 +15,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
 
-        if ($request->user()->cannot('index', Post::class)) {
-            return response()->json(['message' => 'You do not have permission to view this resource'],403);
-        }
+        Gate::authorize('index', Post::class);
 
         $request->validate([
             'min_lat' => 'required|numeric',
@@ -46,9 +45,8 @@ class PostController extends Controller
     public function store(Request $request)
     {
 
-        if ($request->user()->cannot('store', Post::class)) {
-            return response()->json(['message' => 'You do not have permission to create this resource'],403);
-        }
+        Gate::authorize('store', Post::class);
+
 
         $validatedData = $request->validate([
             'content' => 'required|string',
@@ -69,9 +67,7 @@ class PostController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        if ($request->user()->cannot('show', Post::class)) {
-            return response()->json(['message' => 'You do not have permission to view this resource'],403);
-        }
+        Gate::authorize('show', Post::class);
 
         $post = Post::where($id)
         ->join('users', 'posts.author_id', '=', 'users.id')
@@ -86,9 +82,7 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if ($request->user()->cannot('update', Post::class)) {
-            return response()->json(['message' => 'You do not have permission to update this resource'],403);
-        }
+        Gate::authorize('update', Post::class);
 
         $post = Post::findOrFail($id);
 
@@ -108,9 +102,7 @@ class PostController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        if ($request->user()->cannot('destroy', Post::class)) {
-            return response()->json(['message' => 'You do not have permission to delete this resource'],403);
-        }
+        Gate::authorize('destroy', Post::class);
 
         $post = Post::findOrFail($id);
 
