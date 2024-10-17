@@ -24,8 +24,8 @@ export function UserInfoProvider({ children }: UserInfoProviderProps) {
     const [loggedIn, setLoggedIn] = useState<boolean>(false)
 
     const checkLoggedin = async() => {
-        const {data} = (await get('/check')).data.result
-        setLoggedIn(data);
+        const result = (await get('/check')).data.result
+        setLoggedIn(result)
     }
 
     useEffect(() => {

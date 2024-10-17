@@ -57,6 +57,7 @@ Promise<{data: any, error: HTTPError | null, status: number}>
 
   if (data.csrfToken) {
     document.querySelector('meta[name="csrf-token"]')?.setAttribute('content', data.csrfToken);
+    delete data.csrfToken
   }
 
   return { data, error, status }
