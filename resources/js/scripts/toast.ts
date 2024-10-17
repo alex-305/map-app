@@ -6,3 +6,9 @@ export function ErrorToast(message: string, status: number) {
         duration: 2000
     })
 }
+
+export function SuccessToast(message:string) {
+    toast.success(message, {
+        duration: 2000
+    })
+}

@@ -1,7 +1,7 @@
 import { useUserInfo } from "@/components/UserInfoContext"
 import { toast } from "sonner"
 import { post } from "./http"
-import { ErrorToast } from "./toast"
+import { ErrorToast, SuccessToast } from "./toast"
 import { useContext } from "react"
 import { LoginCreds, RegistrationCreds } from "@/types/Creds"
 
@@ -12,7 +12,7 @@ const useAuth = () => {
         const { error } = await post('/login', creds)
         if (!error) {
             setLoggedIn(true)
-            if(toastToast) toast.success("Successfully logged in.")
+            if(toastToast) SuccessToast("Successfully logged in.")
             return true
         }
         else {
@@ -26,7 +26,7 @@ const useAuth = () => {
 
         if (!error) {
             setLoggedIn(true)
-            if (toastToast) toast.success("Successfully created account.")
+            if (toastToast) SuccessToast("Successfully created account.")
             return true
         } else {
             ErrorToast(error.message ?? "Error unknown", error.status)
@@ -40,7 +40,7 @@ const useAuth = () => {
 
         if (!error) {
             setLoggedIn(false)
-            if (toastToast) toast.success("Successfully logged out.")
+            if (toastToast) SuccessToast("Successfully logged out.")
             return true
         }
         else {
