@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class LoginController extends Controller {
+class AuthController extends Controller {
     public function register(Request $request) {
         $validatedData = $request->validate([
             'username' => ['required', 'string', 'min:3', 'max:20', 'unique:users,username'],
