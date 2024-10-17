@@ -2,6 +2,7 @@
 export type Post = {
     content:string
     author_id:number
+    username:string
     latitude:number
     longitude:number
     like_count:number

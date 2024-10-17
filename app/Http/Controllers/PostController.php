@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -26,6 +27,8 @@ class PostController extends Controller
         $posts = Post::whereBetween('latitude', [$minLat, $maxLat])
         ->whereBetween('longitude', [$minLng, $maxLng])
         ->orderBy('like_count')
+        ->join('users', 'posts.author_id', '=', 'users.id')
+        ->select('posts.*','users.username')
         ->limit(100)
         ->get();
 
@@ -56,7 +59,10 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::where($id)
+        ->join('users', 'posts.author_id', '=', 'users.id')
+        ->select('posts.*', 'users.username')
+        ->firstOrFail();
 
         return response()->json($post, 200);
     }

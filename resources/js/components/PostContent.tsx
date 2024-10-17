@@ -5,6 +5,7 @@ import Icon from "@mdi/react"
 import { useEffect, useState } from "react"
 import { get } from "../scripts/http"
 import { CommentDialog } from "./CommentDialog"
+import { ErrorToast } from "@/scripts/toast"
 
 type PostContentProps = {
     post:Post
@@ -45,7 +46,7 @@ function PostContent(props:PostContentProps) {
     return (
         <div>
             <div>
-                <span className="font-semibold cursor-pointer">Placeholder</span>
+                <span className="font-semibold cursor-pointer">{props.post.username}</span>
             </div>
             <div className="font-normal py-2">{props.post.content}</div>
 
