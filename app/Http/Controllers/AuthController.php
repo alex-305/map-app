@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class LoginController extends Controller {
+class AuthController extends Controller {
     public function register(Request $request) {
         $validatedData = $request->validate([
             'username' => ['required', 'string', 'min:3', 'max:20', 'unique:users,username'],
@@ -69,9 +69,28 @@ class LoginController extends Controller {
     }
 
     public function isLoggedIn() {
-        $res = Auth::check();
+        $result = Auth::check();
+
+        if($result) {
+            $user = Auth::user();
+
+            return response()->json([
+                'result' => $result,
+                'user' => [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'created_at' => $user->created_at,
+                    'follower_count' => $user->follower_count
+                ],
+                'csrfToken' => csrf_token()
+            ], 200);
+        }
+
         return response()->json([
-        'result' => $res,
-        'csrfToken' => csrf_token()], 200);
+            'result' => $result,
+            'message' => 'This user is not logged in',
+            'csrfToken' => csrf_token()
+        ], 200);
     }
 }

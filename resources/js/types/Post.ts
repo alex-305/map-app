@@ -2,6 +2,7 @@
 export type Post = {
     content:string
     author_id:number
+    username:string
     latitude:number
     longitude:number
     like_count:number
@@ -17,13 +18,4 @@ export type NewPost = {
     latitude:number
     longitude:number
     color:string
-}
-
-export type Comment = {
-    author_id: number
-    content: string
-    created_at: string
-    id: number
-    post_id: number
-    updated_at: string
 }

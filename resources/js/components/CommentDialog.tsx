@@ -13,6 +13,7 @@ import { post } from '@/scripts/http'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { Post } from "@/types/Post"
 import CommentList from './CommentList'
+import { ErrorToast } from '@/scripts/toast'
 
 interface CommentDialogProps {
   post: Post,
@@ -24,10 +25,12 @@ export function CommentDialog(props: CommentDialogProps) {
   const [content, setContent] = useState<string>("")
 
   async function comment() {
-    const { errors } = await post(`/posts/${props.post.id}/comments`, { content })
-    if (!errors) {
+    const { error } = await post(`/posts/${props.post.id}/comments`, { content })
+    if (!error) {
       props.onComment()
       setContent("")
+    } else {
+      ErrorToast(error.message, error.status)
     }
   }
 

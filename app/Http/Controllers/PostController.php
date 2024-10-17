@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -12,6 +14,9 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
+
+        Gate::authorize('index', Post::class);
+
         $request->validate([
             'min_lat' => 'required|numeric',
             'max_lat' => 'required|numeric',
@@ -26,6 +31,8 @@ class PostController extends Controller
         $posts = Post::whereBetween('latitude', [$minLat, $maxLat])
         ->whereBetween('longitude', [$minLng, $maxLng])
         ->orderBy('like_count')
+        ->join('users', 'posts.author_id', '=', 'users.id')
+        ->select('posts.*','users.username')
         ->limit(100)
         ->get();
 
@@ -37,6 +44,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
+        Gate::authorize('store', Post::class);
+
+
         $validatedData = $request->validate([
             'content' => 'required|string',
             'latitude' => 'required|numeric',
@@ -54,9 +65,14 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        $post = Post::findOrFail($id);
+        Gate::authorize('show', Post::class);
+
+        $post = Post::where($id)
+        ->join('users', 'posts.author_id', '=', 'users.id')
+        ->select('posts.*', 'users.username')
+        ->firstOrFail();
 
         return response()->json($post, 200);
     }
@@ -66,10 +82,11 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        Gate::authorize('update', Post::class);
+
         $post = Post::findOrFail($id);
 
         $validatedData = $request->validate([
-            'author_id' => 'required|integer',
             'content' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
@@ -83,8 +100,10 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        Gate::authorize('destroy', Post::class);
+
         $post = Post::findOrFail($id);
 
         $post->delete();
