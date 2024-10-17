@@ -7,7 +7,7 @@ import { useUserInfo } from "./UserInfoContext"
 import useAuth from "@/scripts/useAuth"
 
 export default function LoginDropdown() {
-    const { loggedIn } = useUserInfo()
+    const { loggedIn, user } = useUserInfo()
     const { LogoutUser } = useAuth()
     
     async function logout() {
@@ -20,6 +20,10 @@ export default function LoginDropdown() {
                 <Button className='rounded-none' variant="ghost">Account</Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto flex flex-col gap-4">
+                <div>Hey <span className="font-bold">{
+                    user?.username ?? 
+                    <span className="italic">Anonymous User</span>}</span>!
+                </div>
                 <div className="flex">
                     <Button variant="link">Settings</Button>
                     <Button variant="link">My Posts</Button>
