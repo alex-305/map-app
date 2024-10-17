@@ -1,25 +1,17 @@
 import LoginForm from "./LoginForm"
 import { Button } from "./ui/button"
-import { post } from "@/scripts/http"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { RegisterDialog } from "./RegisterDialog"
 import { Separator } from "./ui/separator"
 import { useUserInfo } from "./UserInfoContext"
-import { ErrorToast } from '@/scripts/toast'
+import useAuth from "@/scripts/useAuth"
 
 export default function LoginDropdown() {
-    const { loggedIn, setLoggedIn } = useUserInfo()
+    const { loggedIn } = useUserInfo()
+    const { LogoutUser } = useAuth()
     
     async function logout() {
-        const { error } = await post('/logout')
-        if (!error)
-            setLoggedIn(false)
-        else
-            ErrorToast(error.message, error.status)
-    }
-
-    async function login() {
-        setLoggedIn(true)
+        const loggedOut = await LogoutUser()
     }
 
     return loggedIn ? (
@@ -41,7 +33,7 @@ export default function LoginDropdown() {
                 <Button className='rounded-none' variant="ghost">Login</Button>
             </PopoverTrigger>
             <PopoverContent>
-                <LoginForm onLogin={login} />
+                <LoginForm />
                 <Separator className="mt-4 mb-2"/>
                 <div>
                     <RegisterDialog />

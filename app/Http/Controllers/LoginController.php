@@ -23,23 +23,25 @@ class LoginController extends Controller {
 
         Auth::login($user);
 
-        return response()->json(['message'=> 'User successfully registered an account.'], 200);
+        return response()->json([
+        'message'=> 'User successfully registered an account.', 
+        'csrfToken' => csrf_token()
+    ], 200);
     }
 
     public function login(Request $request) {
         $validatedData = $request->validate([
-            'email' => ['nullable', 'email', 'exists:users,email', 'required_without:username'],
-            'username' => ['nullable', 'string', 'exists:users,username', 'required_without:email'],
+            'identifier' => ['string', 'required'],
             'password' => ['string', 'required']
         ]);
 
 
         $creds['password'] = $validatedData['password'];
 
-        if (!empty($validatedData['email'])) {
-            $creds['email'] = $validatedData['email'];
+        if (filter_var($validatedData['identifier'], FILTER_VALIDATE_EMAIL)) {
+            $creds['email'] = $validatedData['identifier'];
         } else {
-            $creds['username'] = $validatedData['username'];
+            $creds['username'] = $validatedData['identifier'];
         }
 
         $user = null;
@@ -47,7 +49,10 @@ class LoginController extends Controller {
 
         if (Auth::attempt($creds)) {
             $request->session()->regenerate();
-            return response()->json(['message' => 'Login successful.'], 200);
+            return response()->json([
+                'message' => 'Login successful.', 
+                'csrfToken' => csrf_token()
+            ], 200);
         }
 
         return response()->json(['message' => 'Incorrect credentials'], 401);
@@ -57,11 +62,16 @@ class LoginController extends Controller {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return response()->json(['Logout sucessful.' => true]);
+        return response()->json([
+            'Logout sucessful.' => true, 
+            'csrfToken' => csrf_token()
+        ]);
     }
 
     public function isLoggedIn() {
         $res = Auth::check();
-        return response()->json(["result" => $res], 200);
+        return response()->json([
+        'result' => $res,
+        'csrfToken' => csrf_token()], 200);
     }
 }

@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { z } from "zod" 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { post } from "@/scripts/http"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -13,6 +11,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { RegistrationCreds } from '@/types/Creds';
+import useAuth from "@/scripts/useAuth"
 
 const formSchema = z.object({
     username: z.string().min(1, "Invalid username"),
@@ -27,7 +27,10 @@ const formSchema = z.object({
     message: "Passwords do not match"
 })
 
-export default function RegisterForm({ onRegister, onError }) {
+export default function RegisterForm({ onRegister }) {
+    
+    const { RegisterUser } = useAuth()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -39,12 +42,10 @@ export default function RegisterForm({ onRegister, onError }) {
     })
 
     async function register(values: z.infer<typeof formSchema>) {
-        const { data, error } = await post("/register", values)
+        const registered = await RegisterUser(values as RegistrationCreds)
 
-        if (!error) {
-          onRegister()
-        } else {
-          onError(error)
+        if(registered) {
+            onRegister()
         }
     }
 

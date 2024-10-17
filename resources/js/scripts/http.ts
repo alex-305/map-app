@@ -42,7 +42,6 @@ Promise<{data: any, error: HTTPError | null, status: number}>
 
   if(payload && ['POST', 'PUT', 'PATCH'].includes(req_type)) {
     requestOptions['body'] = JSON.stringify(payload)
-    console.log(payload)
   }
 
   const res = await fetch(url, requestOptions)
@@ -55,6 +54,10 @@ Promise<{data: any, error: HTTPError | null, status: number}>
 
   if (!res.ok)
     error = { message: data.message, status: res.status }
+
+  if (data.csrfToken) {
+    document.querySelector('meta[name="csrf-token"]')?.setAttribute('content', data.csrfToken);
+  }
 
   return { data, error, status }
 }

@@ -15,7 +15,7 @@ function Navbar() {
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
 
-    const { userLocation, loggedIn, setLoggedIn }= useUserInfo()
+    const { userLocation, loggedIn }= useUserInfo()
 
     const Tracker = () => {
         useMapEvents({

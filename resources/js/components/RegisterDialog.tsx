@@ -9,25 +9,15 @@ import {
   DialogTrigger
 } from './ui/dialog'
 import RegisterForm from './RegisterForm'
-import { toast } from 'sonner'
 import { HTTPError } from '@/scripts/http'
-import { useUserInfo } from './UserInfoContext'
 import { ErrorToast } from '@/scripts/toast'
 
 export function RegisterDialog() {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
-  const { userLocation, loggedIn, setLoggedIn }= useUserInfo()
-
   const userRegistered = () => {
     setDialogOpen(false)
-    setLoggedIn(true)
-    toast.success('Registration successful. Welcome!')
-  }
-
-  const registerError = (error:HTTPError) => {
-    ErrorToast(error.message, error.status)
   }
 
   return (
@@ -44,7 +34,7 @@ export function RegisterDialog() {
                 <DialogDescription>Make a new account today!</DialogDescription>
               </div>
             </DialogHeader>
-            <RegisterForm onRegister={userRegistered} onError={registerError}/>
+            <RegisterForm onRegister={userRegistered}/>
           </DialogContent>
         </Dialog>
       </div>
