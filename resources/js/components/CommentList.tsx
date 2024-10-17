@@ -18,7 +18,7 @@ export default function CommentList({ authorId, postId }) {
   return (
     <ScrollArea className="h-[200px]">
       <div className="flex flex-col gap-4">
-        {comments && comments.map((c, i) => {
+        {comments?.length>0 && Array.isArray(comments) && comments.map((c, i) => {
           return (
             <div className="flex flex-col" key={i}>
               <div className="flex justify-between w-[96%]">

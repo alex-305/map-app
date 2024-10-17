@@ -45,7 +45,7 @@ function PostContainer() {
 
     return (
         <>
-            {posts.map((post:Post, _) => (
+            {posts?.length>0 && Array.isArray(posts) && posts.map((post:Post, _) => (
                 <PostCircle key={post.id} post={post}/>
             ))
             }
