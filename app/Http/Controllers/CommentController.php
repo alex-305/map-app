@@ -41,8 +41,7 @@ class CommentController extends Controller
             return response()->json(['message' => 'You do not have permission to delete this resource'],403);
         }
 
-        $comment = Comment::where('id', $commentId)
-            ->firstOrFail();
+        $comment = Comment::findOrFail($commentId);
 
         $post = Post::findOrFail($comment->post_id);  // look for post id
 
