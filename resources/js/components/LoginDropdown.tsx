@@ -1,18 +1,17 @@
 import LoginForm from "./LoginForm"
 import { Button } from "./ui/button"
-import { post } from "@/scripts/http"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { RegisterDialog } from "./RegisterDialog"
 import { Separator } from "./ui/separator"
 import { useUserInfo } from "./UserInfoContext"
+import useAuth from "@/scripts/useAuth"
 
-export default function LoginDropdown({ onLogin, onLogout }) {
+export default function LoginDropdown() {
     const { loggedIn } = useUserInfo()
+    const { LogoutUser } = useAuth()
     
     async function logout() {
-        const { errors } = await post('/logout')
-        if (!errors)
-            onLogout()
+        const loggedOut = await LogoutUser()
     }
 
     return loggedIn ? (
@@ -34,7 +33,7 @@ export default function LoginDropdown({ onLogin, onLogout }) {
                 <Button className='rounded-none' variant="ghost">Login</Button>
             </PopoverTrigger>
             <PopoverContent>
-                <LoginForm onLogin={onLogin} />
+                <LoginForm />
                 <Separator className="mt-4 mb-2"/>
                 <div>
                     <RegisterDialog />

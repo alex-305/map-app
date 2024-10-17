@@ -1,13 +1,17 @@
-import { get } from "@/scripts/http"
+import { get, post } from "@/scripts/http"
 import { LatLng } from "leaflet"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useMap } from "react-leaflet"
+import { toast } from "sonner"
+import { RegistrationCreds, LoginCreds } from "@/types/Creds"
+import { ErrorToast } from "@/scripts/toast"
 
 const UserInfoContext = createContext<{
-    userLocation: LatLng,
+    userLocation: LatLng | null,
     loggedIn: boolean,
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
-} | null>(null)
+    checkLoggedin: () => Promise<void>
+} | undefined>(undefined)
 
 export const useUserInfo = () => useContext(UserInfoContext)
 
@@ -17,13 +21,15 @@ type UserInfoProviderProps = {
 
 export function UserInfoProvider({ children }: UserInfoProviderProps) {
     const [userLocation, setUserLocation] = useState<LatLng | null>(null)
-    const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
+    const [loggedIn, setLoggedIn] = useState<boolean>(false)
+
+    const checkLoggedin = async() => {
+        const result = (await get('/check')).data.result
+        setLoggedIn(result)
+    }
 
     useEffect(() => {
-        (async () => {
-            const result = (await get('/check')).data.result
-            setLoggedIn(result);
-        })()
+        checkLoggedin()
     }, [])
 
     const map = useMap()
@@ -35,7 +41,7 @@ export function UserInfoProvider({ children }: UserInfoProviderProps) {
     }, [map])
 
     return (
-        <UserInfoContext.Provider value={{ userLocation, loggedIn, setLoggedIn }}>
+        <UserInfoContext.Provider value={{ userLocation, loggedIn, setLoggedIn, checkLoggedin }}>
             {children}
         </UserInfoContext.Provider>
     )

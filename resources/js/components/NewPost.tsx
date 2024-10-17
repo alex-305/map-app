@@ -37,7 +37,6 @@ function NewPostButton() {
             color: HSLToHex(sliderValue, 100, 50),
         }
 
-        console.log(JSON.stringify(newPost))
         if(content!=="") {
             const response = await post('/posts', newPost)
 

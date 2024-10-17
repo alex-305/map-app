@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -9,28 +9,35 @@ import {
   DialogTrigger
 } from './ui/dialog'
 import RegisterForm from './RegisterForm'
+import { HTTPError } from '@/scripts/http'
+import { ErrorToast } from '@/scripts/toast'
 
 export function RegisterDialog() {
-  const [open, setOpen] = useState(false)
 
-  const handleRegister = (loginData) => {
-    console.log('User registered:', loginData)
-    setOpen(false)
-    window.location.reload()
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+
+  const userRegistered = () => {
+    setDialogOpen(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant='ghost'> Register </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Register</DialogTitle>
-          <DialogDescription>Make a new account today!</DialogDescription>
-        </DialogHeader>
-        <RegisterForm onRegister={handleRegister}/>
-      </DialogContent>
-    </Dialog>
+    <>
+      <div>
+         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button variant='link'>Register</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <div>
+                <DialogTitle>Register</DialogTitle>
+                <DialogDescription>Make a new account today!</DialogDescription>
+              </div>
+            </DialogHeader>
+            <RegisterForm onRegister={userRegistered}/>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
   )
 }

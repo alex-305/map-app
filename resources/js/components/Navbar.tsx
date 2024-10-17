@@ -6,13 +6,16 @@ import LoginDropdown from "./LoginDropdown"
 import { useState } from "react"
 import FeedDropdown from "./FeedDropdown"
 import { useUserInfo } from "./UserInfoContext"
+import { toast } from "sonner"
+import { HTTPError } from "@/scripts/http"
+import { ErrorToast } from '@/scripts/toast'
 
 function Navbar() {
     const map = useMap()
     const [reachedMaxZoom, setReachedMaxZoom] = useState(false)
     const [reachedMinZoom, setReachedMinZoom] = useState(false)
 
-    const { userLocation, loggedIn, setLoggedIn }= useUserInfo()
+    const { userLocation, loggedIn }= useUserInfo()
 
     const Tracker = () => {
         useMapEvents({
@@ -47,16 +50,7 @@ function Navbar() {
             </Button>
 
             <FeedDropdown />            
-            <LoginDropdown
-            onLogin={() => {
-                setLoggedIn(true)
-                location.reload() // TODO try to find a way to avoid this
-            }}
-            onLogout={() => {
-                setLoggedIn(false)
-                location.reload() // TODO this too
-            }}
-            />
+            <LoginDropdown/>
 
             <Button 
             onClick={zoomOut} 

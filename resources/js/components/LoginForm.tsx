@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form"
 import { z } from "zod" 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { post } from "@/scripts/http"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -12,38 +11,41 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { LoginCreds } from "@/types/Creds"
+import useAuth from "@/scripts/useAuth"
+import { useEffect } from "react"
 
 const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string()
+    identifier: z.string().min(1, "Username or email is required"),
+    password: z.string().min(1, "Password is required"),
 })
 
-export default function LoginForm({ onLogin }) {
+export default function LoginForm() {
+
+    const { LoginUser } = useAuth()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "",
+            identifier: "",
             password: "",
         },
     })
-
+    
     async function login(values: z.infer<typeof formSchema>) {
-        const { errors } = await post('/login', values)
-        if (!errors)
-            onLogin()
+        const loggedIn = await LoginUser(values as LoginCreds)
     }
-
+    
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(login)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="email"
+                    name="identifier"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input id="email" placeholder="hello@mail.com" {...field} />
+                                <Input id="identifier" placeholder="Username or Email" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -54,15 +56,14 @@ export default function LoginForm({ onLogin }) {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input id="password" type="password" {...field} />
+                                <Input id="password" placeholder="Password" type="password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button className="flex justify-end" type="submit">Login</Button>
             </form>
         </Form>
     )
