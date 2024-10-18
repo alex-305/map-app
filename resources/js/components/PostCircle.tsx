@@ -10,7 +10,7 @@ function PostMarker(props:PostMarkerProps) {
 
     return (
         <>
-            <Circle color={`#${props.post.color}`} center={[props.post.latitude, props.post.longitude]} radius={50*props.post.like_count || 300}>
+            <Circle color={`#${props.post.color}`} center={[props.post.latitude, props.post.longitude]} radius={50*props.post.like_count || 25}>
                 <Popup>
                     <PostContent onLikeChange={()=> {}} post={props.post}/>
                 </Popup>    
