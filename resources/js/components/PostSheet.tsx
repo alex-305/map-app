@@ -64,25 +64,22 @@ export function PostSheet(props: PostSheetProps) {
               </Card>
             </div>
 
-            <SheetHeader>
-              <SheetTitle>Comments</SheetTitle>
-            </SheetHeader>
-            <ScrollArea className='px-4'>
+            <ScrollArea className='h-full px-4'>
               <CommentList authorId={props.post.author_id} postId={props.post.id}/>
             </ScrollArea>
           
             <div className='shrink-0 flex flex-col gap-2'>
-              <SheetClose asChild>
-              </SheetClose>
               <Textarea
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder="Say something here..."
               className='resize-none h-full'
               />
+              <SheetClose asChild>
                 <Button variant="default" onClick={comment}>
                   Post Comment
                 </Button>
+              </SheetClose>
             </div>
           </SheetContent>
         </Sheet>
