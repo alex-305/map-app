@@ -4,8 +4,7 @@ import { mdiHeart, mdiHeartOutline, mdiCommentOutline } from "@mdi/js"
 import Icon from "@mdi/react"
 import { useEffect, useState } from "react"
 import { get } from "../scripts/http"
-import { CommentDialog } from "./CommentDialog"
-import { ErrorToast } from "@/scripts/toast"
+import { PostSheet } from "./PostSheet"
 
 type PostContentProps = {
     post:Post
@@ -63,13 +62,13 @@ function PostContent(props:PostContentProps) {
                     }
                     <span>{props.post.like_count + (isJustLiked ? 1 : 0)}</span>
                 </div>
-                <CommentDialog post={props.post} onComment={() => setTimesCommented(timesCommented + 1)}>
+                <PostSheet post={props.post} onComment={() => setTimesCommented(timesCommented + 1)}>
                     <div 
-                    className="cursor-pointer select-none flex flex-row items-center">
+                    className="cursor-pointer select-none flex flex-row items-center comment-button">
                         <Icon path={mdiCommentOutline} size={1}/>
                         <span>{(props.post.comment_count + timesCommented).toString()}</span>
                     </div>
-                </CommentDialog>
+                </PostSheet>
             </div>
         </div>
     )
