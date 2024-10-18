@@ -19,7 +19,6 @@ function PostMarker(props:PostMarkerProps) {
     
     const onLikeJustChanged = (change:number) => {
         setCircleRadius(getRadius(props.post.like_count + change))
-        console.log(getRadius(props.post.like_count + change))
     }
 
     return (
