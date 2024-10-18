@@ -1,14 +1,21 @@
 import { bounds, latLng } from "leaflet"
 import PostCircle from "./PostCircle"
 import type { Post } from "@/types/Post"
-import { useEffect, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import { useMap } from "react-leaflet"
 import { get } from '../scripts/http'
 import { ErrorToast } from "@/scripts/toast"
+import { Comment } from "@/types/Comment"
 
-function PostContainer() {
+export const PostContext = createContext<{
+    currentPost?: Post,
+    setCurrentPost: React.Dispatch<React.SetStateAction<Post>>
+} | undefined>(undefined)
+
+export function PostContainer() {
 
     const [posts, setPosts] = useState<Post[] | []>([])
+    const [currentPost, setCurrentPost] = useState<Post>(null)
 
     const map = useMap()
 
@@ -51,10 +58,12 @@ function PostContainer() {
 
     return (
         <>
-            {posts?.length>0 && Array.isArray(posts) && posts.map((post:Post, _) => (
-                <PostCircle key={post.id} post={post}/>
-            ))
-            }
+            <PostContext.Provider value={{ currentPost, setCurrentPost }}>
+                {posts?.length>0 && Array.isArray(posts) && posts.map((post:Post, _) => (
+                    <PostCircle key={post.id} post={post}/>
+                ))
+                }
+            </PostContext.Provider>
         </>
     )
 }
