@@ -1,6 +1,7 @@
 export type LoginCreds = {
     identifier:string
     password:string
+    rememberMe:boolean
 }
 
 export type RegistrationCreds = {

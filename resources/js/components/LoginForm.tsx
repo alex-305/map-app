@@ -13,7 +13,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { LoginCreds } from "@/types/Creds"
 import useAuth from "@/scripts/useAuth"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { Checkbox } from "./ui/checkbox"
 
 const formSchema = z.object({
     identifier: z.string().min(1, "Username or email is required"),
@@ -24,6 +25,12 @@ export default function LoginForm() {
 
     const { LoginUser } = useAuth()
 
+    const [rememberMe, setRememberMe] = useState<boolean>(false)
+
+    const handleCheckboxChange = () => {
+        setRememberMe((prev) => !prev)
+    };
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -33,6 +40,7 @@ export default function LoginForm() {
     })
     
     async function login(values: z.infer<typeof formSchema>) {
+        values['rememberMe'] = rememberMe
         const loggedIn = await LoginUser(values as LoginCreds)
     }
     
@@ -63,7 +71,13 @@ export default function LoginForm() {
                         </FormItem>
                     )}
                 />
-                <Button className="flex justify-end" type="submit">Login</Button>
+                <div className="flex flex-row">
+                    <div className="flex flex-row items-center space-x-1 mr-auto">
+                        <Checkbox checked={rememberMe} onCheckedChange={handleCheckboxChange} />
+                        <div className="cursor-pointer select-none" onClick={handleCheckboxChange}>Remember me</div>
+                    </div>
+                    <Button className="flex justify-end" type="submit">Login</Button>
+                </div>
             </form>
         </Form>
     )

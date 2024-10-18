@@ -32,7 +32,8 @@ class AuthController extends Controller {
     public function login(Request $request) {
         $validatedData = $request->validate([
             'identifier' => ['string', 'required'],
-            'password' => ['string', 'required']
+            'password' => ['string', 'required'],
+            'rememberMe' => ['boolean', 'nullable']
         ]);
 
 
@@ -47,7 +48,9 @@ class AuthController extends Controller {
         $user = null;
         $identifier = '';
 
-        if (Auth::attempt($creds)) {
+        error_log($validatedData['rememberMe']);
+
+        if (Auth::attempt($creds, $validatedData['rememberMe'])) {
             $request->session()->regenerate();
             return response()->json([
                 'message' => 'Login successful.', 
