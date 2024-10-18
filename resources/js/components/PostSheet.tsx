@@ -62,11 +62,11 @@ export function PostSheet(props: PostSheetProps) {
                   <p>{props.post.content}</p>
                 </CardContent>
               </Card>
+              <SheetHeader className='mt-4'>
+                <SheetTitle>Comments</SheetTitle>
+              </SheetHeader>
             </div>
 
-            <SheetHeader>
-              <SheetTitle>Comments</SheetTitle>
-            </SheetHeader>
             <ScrollArea className='px-4'>
               <CommentList authorId={props.post.author_id} postId={props.post.id}/>
             </ScrollArea>
