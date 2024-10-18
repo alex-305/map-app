@@ -35,7 +35,16 @@ export function PostContainer() {
 
 
             if(!error) {
-                setPosts(prevPosts => [...prevPosts, ...(data as Post[] || [])]);
+                setPosts(prevPosts => {
+                    const newPosts = data as Post[] || [];
+                    
+                    const allPosts = [...prevPosts, ...newPosts];
+                    const uniquePosts = allPosts.filter((post, index, self) => 
+                        index === self.findIndex(p => p.id === post.id)
+                    );
+                    
+                    return uniquePosts;
+                });
             } else {
                 ErrorToast(error.message, error.status)
             }
