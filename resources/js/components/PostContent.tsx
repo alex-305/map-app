@@ -8,6 +8,7 @@ import { PostSheet } from "./PostSheet"
 
 type PostContentProps = {
     post:Post
+    onLikeChange:() => void
 }
 
 function PostContent(props:PostContentProps) {
