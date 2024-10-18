@@ -9,6 +9,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import { PostContext } from './PostContainer'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { ScrollArea } from './ui/scroll-area'
+import { formatDate } from '@/scripts/formatDate'
 
 interface PostSheetProps {
   post: Post,
@@ -55,7 +56,7 @@ export function PostSheet(props: PostSheetProps) {
               <Card style={{ backgroundColor: `#${props.post.color}27` }}>
                 <CardHeader>
                   <CardTitle>Posted by {props.post.username}</CardTitle>
-                  <CardDescription>Posted on {props.post.created_at}</CardDescription>
+                  <CardDescription>Posted on {formatDate(props.post.created_at)}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p>{props.post.content}</p>
@@ -72,9 +73,6 @@ export function PostSheet(props: PostSheetProps) {
           
             <div className='shrink-0 flex flex-col gap-2'>
               <SheetClose asChild>
-                <Button variant="default" onClick={comment}>
-                  Post Comment
-                </Button>
               </SheetClose>
               <Textarea
               value={content}
@@ -82,6 +80,9 @@ export function PostSheet(props: PostSheetProps) {
               placeholder="Say something here..."
               className='resize-none h-full'
               />
+                <Button variant="default" onClick={comment}>
+                  Post Comment
+                </Button>
             </div>
           </SheetContent>
         </Sheet>
