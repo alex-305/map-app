@@ -35,7 +35,7 @@ export function PostContainer() {
 
 
             if(!error) {
-                setPosts(data as Post[] || [])
+                setPosts(prevPosts => [...prevPosts, ...(data as Post[] || [])]);
             } else {
                 ErrorToast(error.message, error.status)
             }
