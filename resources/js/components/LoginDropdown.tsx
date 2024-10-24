@@ -46,7 +46,7 @@ export default function LoginDropdown() {
                 <Separator className="mt-4 mb-2"/>
                 <div>
                     <RegisterDialog />
-                    <Button variant="ghost">Forgot password?</Button>
+                    <Button variant="link">Forgot password?</Button>
                 </div>
             </PopoverContent>
         </Popover>
