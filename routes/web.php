@@ -5,8 +5,10 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return Inertia::render('Home');
@@ -37,4 +39,9 @@ Route::controller(CommentController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}', 'show');
+});
+
+Route::controller(SettingsController::class)->group(function () {
+    Route::get('/settings', 'index')->middleware('auth')->name('settings.index'); // Ensure the user is authenticated
+    Route::post('/settings', 'update')->middleware('auth')->name('settings.update'); // Ensure the user is authenticated
 });
