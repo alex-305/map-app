@@ -21,6 +21,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout');
     Route::post('/login', 'login');
     Route::get('/check', 'isLoggedIn');
+
+    Route::post('/forgot-password', 'forgotPassword');
+    Route::get('password/reset', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [AuthController::class, 'reset'])->name('password.update');
 });
 
 Route::controller(LikeController::class)->group(function () {
