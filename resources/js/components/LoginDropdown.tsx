@@ -32,7 +32,9 @@ export default function LoginDropdown() {
                     <div>Member since {formatDate(user?.created_at) ?? "Unknown"}</div>
                 </div>
                 <div className="flex">
-                    <Button variant="link">Settings</Button>
+                    <a href="/settings">
+                        <Button variant="link">Settings</Button>
+                    </a>
                     <Button variant="link">My Posts</Button>
                 </div>
                 <Button onClick={logout}>Logout</Button>
@@ -48,7 +50,7 @@ export default function LoginDropdown() {
                 <Separator className="mt-4 mb-2"/>
                 <div>
                     <RegisterDialog />
-                    <ForgotPasswordDialog />
+                    <Button variant="link">Forgot password?</Button>
                 </div>
             </PopoverContent>
         </Popover>
