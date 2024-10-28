@@ -47,7 +47,7 @@ export default function ForgotPasswordForm({ onReset }) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input id="email" placeholder="youremail@example.com" {...field} />
+                <Input id="email" placeholder="email@gmail.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

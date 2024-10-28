@@ -10,7 +10,7 @@ import {
 } from "./ui/dialog"
 import ForgotPasswordForm from "./ForgotPasswordForm"
 
-export function ForgotPasswordDialog() {
+export function ForgotPasswordDialog(){
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const passwordReset = () => {
