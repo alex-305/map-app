@@ -49,7 +49,19 @@ const useAuth = () => {
         }
     }
 
-    return { LoginUser, RegisterUser, LogoutUser }
+    const ForgotPassword = async(email: string, toastToast: boolean = true): Promise<boolean> => {
+        const {error} = await post("/forgot-password", { email })
+        
+        if(!error) {
+            if(toastToast) SuccessToast("Password reset link has been sent to your email!")
+            return true
+        }else{
+            ErrorToast(error.message ?? "Error", error.status)
+            return false
+        }
+    }
+
+    return { LoginUser, RegisterUser, LogoutUser, ForgotPassword }
 }
 
 export default useAuth

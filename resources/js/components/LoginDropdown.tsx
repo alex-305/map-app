@@ -6,6 +6,8 @@ import { Separator } from "./ui/separator"
 import { useUserInfo } from "./UserInfoContext"
 import useAuth from "@/scripts/useAuth"
 import { formatDate } from "@/scripts/formatDate"
+import { ForgotPasswordDialog } from "./ForgotPasswordDialog"
+
 
 export default function LoginDropdown() {
     const { loggedIn, user } = useUserInfo()
@@ -48,7 +50,7 @@ export default function LoginDropdown() {
                 <Separator className="mt-4 mb-2"/>
                 <div>
                     <RegisterDialog />
-                    <Button variant="link">Forgot password?</Button>
+                    <ForgotPasswordDialog />
                 </div>
             </PopoverContent>
         </Popover>
