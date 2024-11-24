@@ -4,9 +4,10 @@ import { post } from "./http"
 import { ErrorToast, SuccessToast } from "./toast"
 import { useContext } from "react"
 import { LoginCreds, RegistrationCreds } from "@/types/Creds"
+import { verify } from "crypto"
 
 const useAuth = () => {
-    const { setLoggedIn } = useUserInfo()
+    const { setLoggedIn, user } = useUserInfo()
 
     const LoginUser = async(creds:LoginCreds, toastToast:boolean = true):Promise<boolean> => {
         const { error } = await post('/login', creds)
@@ -61,7 +62,56 @@ const useAuth = () => {
         }
     }
 
-    return { LoginUser, RegisterUser, LogoutUser, ForgotPassword }
+    const VerifyPassword = async(password: string, toastToast: boolean = true): Promise<boolean> => {
+        const { error } = await post("/verify-password", { password })
+
+        if (!error) {
+            if (toastToast) SuccessToast("Password verified successfully.")
+            return true
+        } else {
+            ErrorToast(error.message ?? "Error", error.status)
+            return false
+        }
+    }
+
+    const UpdateUsername = async(username: string, toastToast: boolean = true): Promise<boolean> => {
+        const { error } = await post(`/users/${user}/update-username`, { username })
+        console.log(error)
+
+        if (!error) {
+            if (toastToast) SuccessToast("Username updated successfully.")
+            return true
+        } else {
+            ErrorToast(error.message ?? "Error", error.status)
+            return false
+        }
+    }
+
+    const UpdateEmail = async(email: string, toastToast: boolean = true): Promise<boolean> => {
+        const { error } = await post(`/users/${user}/update-email`, { email })
+
+        if (!error) {
+            if (toastToast) SuccessToast("Email updated successfully.")
+            return true
+        } else {
+            ErrorToast(error.message ?? "Error", error.status)
+            return false
+        }
+    }
+
+    const UpdatePassword = async(password: string, password_confirmation: string, toastToast: boolean = true): Promise<boolean> => {
+        const { error } = await post(`/users/${user}/update-password`, { password, password_confirmation })
+
+        if (!error) {
+            if (toastToast) SuccessToast("Password updated successfully.")
+            return true
+        } else {
+            ErrorToast(error.message ?? "Error", error.status)
+            return false
+        }
+    }
+
+    return { LoginUser, RegisterUser, LogoutUser, ForgotPassword, VerifyPassword, UpdateUsername, UpdateEmail, UpdatePassword }
 }
 
 export default useAuth

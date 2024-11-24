@@ -112,6 +112,23 @@ class AuthController extends Controller {
         }
     }
 
+    public function verifyPassword(Request $request) {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Password verified successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Invalid password'], 400);
+        }
+    }
+
     public function showLinkRequestForm() {
         return Inertia::render('Auth/PasswordForgot'); 
     }

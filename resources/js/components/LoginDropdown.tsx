@@ -2,20 +2,32 @@ import LoginForm from "./LoginForm"
 import { Button } from "./ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { RegisterDialog } from "./RegisterDialog"
+import { UpdateUserDialog } from "./UpdateUserDialog"
 import { Separator } from "./ui/separator"
 import { useUserInfo } from "./UserInfoContext"
 import useAuth from "@/scripts/useAuth"
 import { formatDate } from "@/scripts/formatDate"
 import { ForgotPasswordDialog } from "./ForgotPasswordDialog"
+import { useState } from 'react';
+
+
 
 
 export default function LoginDropdown() {
     const { loggedIn, user } = useUserInfo()
     const { LogoutUser } = useAuth()
+    const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
     
     async function logout() {
         const loggedOut = await LogoutUser()
     }
+    const handleUpdateClick = () => {
+        setIsUpdateDialogOpen(true);
+    };
+
+    const handleCloseUpdateDialog = () => {
+        setIsUpdateDialogOpen(false);
+    };
 
     return loggedIn ? (
         <Popover>
@@ -32,9 +44,7 @@ export default function LoginDropdown() {
                     <div>Member since {formatDate(user?.created_at) ?? "Unknown"}</div>
                 </div>
                 <div className="flex">
-                    <a href="/settings">
-                        <Button variant="link">Settings</Button>
-                    </a>
+                        <UpdateUserDialog />
                     <Button variant="link">My Posts</Button>
                 </div>
                 <Button onClick={logout}>Logout</Button>

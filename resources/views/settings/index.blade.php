@@ -28,7 +28,7 @@
            
             <button type="submit" class="btn btn-primary">Save Settings</button>
         </form>
-        <a href="/" class=btn btn-secondary mt-3">Back to Main Page</a>
+        <a href="/" class="btn btn-secondary mt-3">Back to Main Page</a>
         
     </div>
 

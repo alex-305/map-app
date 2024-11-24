@@ -5,8 +5,9 @@ import "leaflet/dist/leaflet.css";
 import NewPost from '../components/NewPost';
 import MouseCoordinates from '../components/MouseCoordinates';
 import Navbar from '../components/Navbar';
+import SettingsButton from '@/components/SettingsButton';
 import CustomControls from '../components/CustomControls';
-import PostContainer from '../components/PostContainer'
+import PostContainer from '../components/PostContainer';
 import { UserInfoProvider } from '../components/UserInfoContext';
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
           <TileLayer className="z-0" noWrap={true} minZoom={2} url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <CustomControls yPosition="top" xPosition="left" className='ml-2 mt-2'>
             <Navbar />
+          </CustomControls>
+          <CustomControls yPosition="toop" xPosition="right" className='mr-5 mb-5'>
+            <SettingsButton/>
           </CustomControls>
           <CustomControls yPosition="bottom" xPosition="right" className='mr-5 mb-5'>
             <NewPost/>

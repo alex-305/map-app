@@ -25,6 +25,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/check', 'isLoggedIn');
 
     Route::post('/forgot-password', 'forgotPassword');
+    Route::post('/verify-password', [AuthController::class, 'verifyPassword']);
     Route::get('password/reset', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
     Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
@@ -44,7 +45,10 @@ Route::controller(CommentController::class)->group(function () {
 });
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('/users/{user}', 'show');
+    Route::get('/users/{user}', 'show')->middleware('auth')->name('users.show');
+    Route::post('/users/{user}/update-username', [UserController::class, 'updateUser'])->middleware('auth')->name('users.update-username');
+    Route::post('/users/{user}/update-email', [UserController::class, 'updateEmail'])->middleware('auth')->name('users.update-email');
+    Route::post('/users/{user}/update-password', [UserController::class, 'updatePassword'])->middleware('auth')->name('users.update-password');
 });
 
 Route::controller(SettingsController::class)->group(function () {
