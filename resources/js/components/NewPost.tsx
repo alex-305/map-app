@@ -27,6 +27,13 @@ function NewPostButton() {
     const { userLocation, loggedIn } = useUserInfo()
 
     const submitClicked = async() => {
+        
+        // if location not available
+        if(!userLocation){
+            console.error("Location not available");
+            alert("Location access is required for you to make a post, please enable your location.");
+            return;
+        }
 
         const content = postTextAreaRef.current?.value as string
 
