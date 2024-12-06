@@ -15,6 +15,7 @@ Route::get('/', function () {
 });
 
 Route::get('posts', [PostController::class, 'index']);
+Route::get('/posts/user/{userId}', [PostController::class, 'showAll'])->middleware('auth');
 
 Route::apiResource('posts', PostController::class)->except('index')->middleware('auth');
 

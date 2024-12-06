@@ -67,14 +67,29 @@ class PostController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        Gate::authorize('show', Post::class);
-
-        $post = Post::where($id)
-        ->join('users', 'posts.author_id', '=', 'users.id')
-        ->select('posts.*', 'users.username')
-        ->firstOrFail();
-
+        $post = Post::findOrFail($id);
+        
+        Gate::authorize('show', $post);
+    
+        $post = Post::where('posts.id', $id)
+            ->join('users', 'posts.author_id', '=', 'users.id')
+            ->select('posts.*', 'users.username')
+            ->firstOrFail();
+    
         return response()->json($post, 200);
+    }
+
+    public function showAll(Request $request, string $userId)
+    {
+        Gate::authorize('showAll', [Post::class, $userId]);
+
+        $posts = Post::where('author_id', $userId)
+            ->join('users', 'posts.author_id', '=', 'users.id')
+            ->select('posts.*', 'users.username')
+            ->orderBy('posts.created_at', 'desc')
+            ->get();
+    
+        return response()->json($posts, 200);
     }
 
     /**

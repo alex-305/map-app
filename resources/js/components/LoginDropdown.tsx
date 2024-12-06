@@ -9,6 +9,7 @@ import useAuth from "@/scripts/useAuth"
 import { formatDate } from "@/scripts/formatDate"
 import { ForgotPasswordDialog } from "./ForgotPasswordDialog"
 import { useState } from 'react';
+import { UserPostsDialog } from "./UserPostsDialog"
 
 
 
@@ -44,8 +45,8 @@ export default function LoginDropdown() {
                     <div>Member since {formatDate(user?.created_at) ?? "Unknown"}</div>
                 </div>
                 <div className="flex">
-                        <UpdateUserDialog />
-                    <Button variant="link">My Posts</Button>
+                    <UpdateUserDialog />
+                    <UserPostsDialog />
                 </div>
                 <Button onClick={logout}>Logout</Button>
             </PopoverContent>
