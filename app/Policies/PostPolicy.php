@@ -24,6 +24,19 @@ class PostPolicy
         return true;
     }
 
+    // Allow users to view their own posts
+    public function showAll(User $user, $targetUserId): bool
+    {
+        
+        return $user->id == $targetUserId;
+    }
+
+    // Allow viewing own posts or if user has special permission
+    public function show(User $user, Post $post): bool
+    {
+        return $user->id === $post->author_id || $user->can('view_all_posts');
+    }
+
     /**
      * Determine whether the user can create models.
      */
