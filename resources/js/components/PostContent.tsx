@@ -8,17 +8,18 @@ import { PostSheet } from "./PostSheet"
 
 type PostContentProps = {
     post:Post
-    onLikeJustChanged:(num:number) => void
+    onLikeJustChanged?:(num:number) => void
+    withoutSheet?:boolean
 }
 
-function PostContent(props:PostContentProps) {
+function PostContent({post:postProp, onLikeJustChanged, withoutSheet = false}:PostContentProps) {
     const [isLiked, setIsLiked] = useState<boolean>(false)
     const [originallyLiked, setOriginallyLiked] = useState<boolean>(false)
     const [timesCommented, setTimesCommented] = useState<number>(0)
     const [likeCountChange, setLikeCountChange] = useState<number>(0)
 
     const likePost = async() => {
-        const response = await post(`/posts/${props.post.id}/like`)
+        const response = await post(`/posts/${postProp.id}/like`)
 
         if(response.status >=200 && response.status < 300) {
             setIsLiked(true)
@@ -26,7 +27,7 @@ function PostContent(props:PostContentProps) {
     }
 
     const unLikePost = async() => {
-        const response = await del(`/posts/${props.post.id}/unlike`)
+        const response = await del(`/posts/${postProp.id}/unlike`)
 
         if(response.status >=200 && response.status < 300) {
             setIsLiked(false)
@@ -42,13 +43,14 @@ function PostContent(props:PostContentProps) {
     }, [isLiked, originallyLiked])
 
     useEffect(() => {
-        props.onLikeJustChanged(likeCountChange)
-    }, [likeCountChange])
+        if(onLikeJustChanged)
+            onLikeJustChanged(likeCountChange)
+    }, [likeCountChange, onLikeJustChanged])
 
     useEffect(() => {
 
         const checkLiked = async() => {
-            const response = await get(`/posts/${props.post.id}/like`)
+            const response = await get(`/posts/${postProp.id}/like`)
             setOriginallyLiked(response.data.liked)
             setIsLiked(response.data.liked)
         }
@@ -60,9 +62,9 @@ function PostContent(props:PostContentProps) {
     return (
         <div>
             <div>
-                <span className="font-semibold cursor-pointer">{props.post.username}</span>
+                <span className="font-semibold cursor-pointer">{postProp.username}</span>
             </div>
-            <div className="font-normal py-2">{props.post.content}</div>
+            <div className="font-normal py-2">{postProp.content}</div>
 
             <div className="font-light flex flex-row space-x-3">
                 <div className="cursor-pointer select-none flex flex-row items-center">
@@ -75,15 +77,21 @@ function PostContent(props:PostContentProps) {
                             <Icon path={mdiHeartOutline} size={1}/>
                         </div>
                     }
-                    <span>{props.post.like_count + likeCountChange}</span>
+                    <span>{postProp.like_count + likeCountChange}</span>
                 </div>
-                <PostSheet post={props.post} onComment={() => setTimesCommented(timesCommented + 1)}>
+                {withoutSheet ? 
+                <div className="cursor-pointer select-none flex flex-row items-center comment-button">
+                    <Icon path={mdiCommentOutline} size={1}/>
+                    <span>{(postProp.comment_count + timesCommented).toString()}</span>
+                </div>
+                :
+                <PostSheet post={postProp} onComment={() => setTimesCommented(timesCommented + 1)}>
                     <div 
                     className="cursor-pointer select-none flex flex-row items-center comment-button">
                         <Icon path={mdiCommentOutline} size={1}/>
-                        <span>{(props.post.comment_count + timesCommented).toString()}</span>
+                        <span>{(postProp.comment_count + timesCommented).toString()}</span>
                     </div>
-                </PostSheet>
+                </PostSheet>}
             </div>
         </div>
     )

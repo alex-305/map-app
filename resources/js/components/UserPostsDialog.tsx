@@ -30,7 +30,7 @@ export function UserPostsDialog() {
           <DialogContent className="max-w-5xl">
             <DialogHeader>
               <div>
-                <DialogTitle>All User Posts</DialogTitle>
+                <DialogTitle>My posts</DialogTitle>
                 <DialogDescription>View all your Posts!</DialogDescription>
               </div>
             </DialogHeader>

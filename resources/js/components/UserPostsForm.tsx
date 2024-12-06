@@ -1,22 +1,11 @@
 import { useState, useEffect } from "react"
 import { useMap } from "react-leaflet"
 import { useUserInfo } from "@/components/UserInfoContext"
-import { mdiHeart, mdiHeartOutline, mdiCommentOutline } from "@mdi/js"
-import PostContent from "./PostContent"
+import { mdiHeartOutline, mdiCommentOutline, mdiHeart, mdiComment } from "@mdi/js"
 import Icon from "@mdi/react"
-import { z } from "zod" 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import useAuth from "@/scripts/useAuth"
+import { formatDate } from "@/scripts/formatDate"
+import { Post } from "@/types/Post"
+import PostContent from "./PostContent"
 
 
 export default function UserPostsForm({ onView }) {
@@ -53,24 +42,17 @@ export default function UserPostsForm({ onView }) {
 
     return (
         <div className="space-y-4 dark:text-zinc-50">
-            <h2><strong>{user.username ?? "Unknown"}</strong>'s Posts</h2>
             <div className="max-h-96 overflow-y-auto">
                 {posts.length > 0 ? (
-                    posts.map((post) => (
+                    posts.map((post:Post) => (
                         <div key={post.id} 
                             onClick={() => handlePostClick(post)} 
-                            className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 post-item text-center border-b dark:border-zinc-50 pb-8 pt-8"
-                        >
-                            {post.content}
-                            <br />
-                            <span className="inline-flex items-center mr-4">
-                                <Icon path={mdiHeartOutline} size={1} />
-                                {post.like_count}
+                            className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 border-b dark:border-zinc-50 pb-3 pt-3 rounded pl-5"
+                            style={{backgroundColor: `#${post.color}27`}}>
+                            <span className="inline-flex text-sm text-stone-500">
+                            {formatDate(post.created_at)}
                             </span>
-                            <span className="inline-flex items-center mr-4">
-                                <Icon path={mdiCommentOutline} size={1} />
-                                {post.comment_count}
-                            </span>
+                            <PostContent post={post} withoutSheet/>
                         </div>
                     ))
                 ) : (
