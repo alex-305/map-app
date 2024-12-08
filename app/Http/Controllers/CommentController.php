@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
@@ -19,8 +20,10 @@ class CommentController extends Controller
         ->select('comments.*','users.username')
         ->get();
     
-        return response()->json($comments, 201);
+        return response()->json($comments, 200); // changed to 200
     }
+
+    
     public function store(Request $request, $postId){
 
         Gate::authorize('store', Comment::class);
@@ -44,19 +47,22 @@ class CommentController extends Controller
 
         return response()->json(['message' => 'Successfully left a comment.'], 201);
     }
-    public function destroy(Request $request, $commentId){
-
-        Gate::authorize('destroy', Comment::class);
-
-        $comment = Comment::findOrFail($commentId);
-
-        $post = Post::findOrFail($comment->post_id);  // look for post id
-
+    
+    public function destroy(Request $request, $postId, $commentId)
+    {
+        // get the comment and check if it belongs to the post
+        $comment = Comment::where('id', $commentId)->where('post_id', $postId)->firstOrFail();
+    
+        Gate::authorize('delete', $comment);
+    
+        $post = Post::findOrFail($postId);
+    
         DB::transaction(function () use ($post, $comment) {
             $comment->delete();
             $post->decrement('comment_count');
         });
-
+    
         return response()->json(null, 204);
     }
-}
+    
+};
