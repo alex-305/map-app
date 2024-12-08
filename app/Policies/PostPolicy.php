@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class PostPolicy
 {
@@ -58,6 +59,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
+        Log::info('User ID: ' . $user->id . ', Post Author ID: ' . $post->author_id);
         return $user->id == $post->author_id;
     }
 

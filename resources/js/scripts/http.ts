@@ -19,46 +19,68 @@ export function http_status_type(status:number):HTTP_STATUS_CLASSES {
   return "ERROR"
 }
 
-async function http_request(req_type: string, url: string, headers_passed?: any, payload?: any): 
-Promise<{data: any, error: HTTPError | null, status: number}> 
-{
-  // we have to manually put the csrf token in the request
+async function http_request(
+  req_type: string,
+  url: string,
+  headers_passed?: any,
+  payload?: any
+): Promise<{ data: any; error: HTTPError | null; status: number }> {
+  
+  // get the CSRF token
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
+  // define headers
   const headers = {
     ...headers_passed,
     'X-CSRF-TOKEN': csrfToken,
-    'Accept': 'application/json'
-  }
+    'Accept': 'application/json',
+  };
 
+  // add content type for applicable methods
   if(['POST', 'PUT', 'PATCH'].includes(req_type)) {
-    headers['Content-Type'] = 'application/json'
+    headers['Content-Type'] = 'application/json';
   }
 
+  // set up request options
   const requestOptions: RequestInit = {
     method: req_type,
-    headers
+    headers,
+  };
+
+  if(payload && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req_type)) {
+    requestOptions['body'] = JSON.stringify(payload);
   }
 
-  if(payload && ['POST', 'PUT', 'PATCH'].includes(req_type)) {
-    requestOptions['body'] = JSON.stringify(payload)
+  try {
+    const res = await fetch(url, requestOptions);
+
+    const status: number = res.status;
+
+    let data = null;
+    let error: HTTPError = null;
+
+    // handle response body only for non-204 responses
+    if(status !== 204) {
+      try {
+        data = await res.json();
+      } catch (e) {
+        console.warn('Response does not contain valid JSON', e);
+      }
+    }
+
+    if(!res.ok) {
+      error = { message: data?.message || 'An error occurred', status };
+    }
+
+    // update CSRF token 
+    if(data?.csrfToken) {
+      document.querySelector('meta[name="csrf-token"]')?.setAttribute('content', data.csrfToken);
+      delete data.csrfToken;
+    }
+
+    return { data, error, status };
+  } catch (e) {
+    console.error('Network or server error', e);
+    return { data: null, error: { message: 'Network or server error', status: 500 }, status: 500 };
   }
-
-  const res = await fetch(url, requestOptions)
-
-  const data = await res.json() ?? {}
-
-  let error: HTTPError = null
-
-  const status: number = res.status
-
-  if (!res.ok)
-    error = { message: data.message, status: res.status }
-
-  if (data.csrfToken) {
-    document.querySelector('meta[name="csrf-token"]')?.setAttribute('content', data.csrfToken);
-    delete data.csrfToken
-  }
-
-  return { data, error, status }
 }

@@ -14,6 +14,7 @@ import { formatDate } from '@/scripts/formatDate'
 interface PostSheetProps {
   post: Post,
   onComment: () => void,
+  onDeleteComment: () => void;
   children: React.ReactNode
 }
 
@@ -67,8 +68,11 @@ export function PostSheet(props: PostSheetProps) {
               </SheetHeader>
             </div>
 
-            <ScrollArea className='h-full px-4'>
-              <CommentList authorId={props.post.author_id} postId={props.post.id}/>
+            <ScrollArea className="h-full px-4">
+              <CommentList
+                postId={props.post.id}
+                onDeleteComment={props.onDeleteComment} // new callback for deletion
+              />
             </ScrollArea>
           
             <div className='shrink-0 flex flex-col gap-2'>

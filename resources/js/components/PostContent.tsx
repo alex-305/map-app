@@ -57,7 +57,10 @@ function PostContent({post:postProp, onLikeJustChanged, withoutSheet = false}:Po
 
         checkLiked()
     }, [])
-
+    
+    const handleCommentUpdate = (type: "add" | "remove") => {
+        setTimesCommented((prev) => (type === "add" ? prev + 1 : Math.max(prev - 1, 0)));
+    };
 
     return (
         <div>
@@ -79,22 +82,26 @@ function PostContent({post:postProp, onLikeJustChanged, withoutSheet = false}:Po
                     }
                     <span>{postProp.like_count + likeCountChange}</span>
                 </div>
-                {withoutSheet ? 
-                <div className="cursor-pointer select-none flex flex-row items-center comment-button">
-                    <Icon path={mdiCommentOutline} size={1}/>
-                    <span>{(postProp.comment_count + timesCommented).toString()}</span>
-                </div>
-                :
-                <PostSheet post={postProp} onComment={() => setTimesCommented(timesCommented + 1)}>
-                    <div 
-                    className="cursor-pointer select-none flex flex-row items-center comment-button">
-                        <Icon path={mdiCommentOutline} size={1}/>
+                {withoutSheet ?(
+                    <div className="cursor-pointer select-none flex flex-row items-center comment-button">
+                        <Icon path={mdiCommentOutline} size={1} />
                         <span>{(postProp.comment_count + timesCommented).toString()}</span>
                     </div>
-                </PostSheet>}
+                ) : (
+                    <PostSheet
+                        post={postProp}
+                        onComment={() => handleCommentUpdate("add")}
+                        onDeleteComment={() => handleCommentUpdate("remove")}
+                    >
+                        <div className="cursor-pointer select-none flex flex-row items-center comment-button">
+                            <Icon path={mdiCommentOutline} size={1} />
+                            <span>{(postProp.comment_count + timesCommented).toString()}</span>
+                        </div>
+                    </PostSheet>
+                )}
             </div>
         </div>
-    )
+    );
 }
 
-export default PostContent
+export default PostContent;
