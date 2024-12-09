@@ -48,6 +48,15 @@ class PostController extends Controller
 
         Gate::authorize('store', Post::class);
 
+        $user = auth()->user(); 
+
+        // check cooldown: get last post timestamp from cache
+        $lastPostTime = cache()->get("user:{$user->id}:last_post_time");
+
+        if($lastPostTime && now()->diffInSeconds($lastPostTime) < 10) {
+            return response()->json(['error' => 'You must wait 10 seconds before making another post'], 429);
+        }
+
 
         $validatedData = $request->validate([
             'content' => 'required|string',
@@ -56,9 +65,11 @@ class PostController extends Controller
             'color' => 'required|string',
         ]);
 
-        $validatedData['author_id'] = auth()->id();
+        $validatedData['author_id'] = $user->id;
 
         $post = Post::create($validatedData);
+
+        cache()->put("user:{$user->id}:last_post_time", now(), 10);
 
         return response()->json($post, 201);
     }
