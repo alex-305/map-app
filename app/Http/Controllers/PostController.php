@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -117,10 +118,15 @@ class PostController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        Gate::authorize('destroy', Post::class);
-
         $post = Post::findOrFail($id);
 
+    
+        Gate::authorize('delete', $post);
+
+        if (!Gate::allows('delete', $post)) {
+            Log::error('Authorization failed for User ID: ' . auth()->id() . ' on Post ID: ' . $id);
+        }
+        
         $post->delete();
 
         return response()->json(null, 204);
