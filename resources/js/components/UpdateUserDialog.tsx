@@ -26,12 +26,12 @@ export function UpdateUserDialog() {
       <div>
          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant='link'>Update User</Button>
+            <Button variant='link'>Account Settings</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <div>
-                <DialogTitle>Update User</DialogTitle>
+                <DialogTitle>Account Settings</DialogTitle>
                 <DialogDescription>Update your account information!</DialogDescription>
               </div>
             </DialogHeader>
