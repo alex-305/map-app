@@ -17,8 +17,8 @@ function SettingsButton({ currentMapStyle, setMapStyle }){
 
     const mapStyles = [
         { name: "Default", url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" },
-        { name: "Dark", url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" },
-        { name: "Light Mode", url: "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png" },
+        { name: "Dark", url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=5714cca8-3a6f-473e-a287-f001112f9719" },
+        { name: "Light Mode", url: "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=5714cca8-3a6f-473e-a287-f001112f9719" },
         { name: "Transport", url: "https://tile.memomaps.de/tilegen/{z}/{x}/{y}.png" },
     ]
 

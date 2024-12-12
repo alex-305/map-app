@@ -47,10 +47,15 @@ function NewPostButton() {
         if(content!=="") {
             const response = await post('/posts', newPost)
 
-            if(http_status_type(response.status)==="SUCCESS") {
+            if(http_status_type(response.status) === "SUCCESS") {
                 map.flyTo(userLocation, 13, {
-                    duration: 1
-                })
+                    duration: 1,
+                });
+            } else if (response.status === 429) {
+                // 10 sec cooldown error
+                alert("You have to wait 10 seconds before making another post");
+            }else {
+                alert("An error occurred while posting. Please try again.");
             }
         }
     }
