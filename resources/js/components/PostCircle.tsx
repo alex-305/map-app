@@ -6,14 +6,15 @@ import { useEffect, useRef, useState } from "react"
 
 type PostMarkerProps = {
     post:Post
+    nearbyPosts: Post[]
 }
 
 function PostMarker(props:PostMarkerProps) {
     
     
-    const getRadius = (likeCount: number) => {
-        return 50*likeCount || 25
-    }
+  const getRadius = (likeCount: number) => {
+      return 50*likeCount || 25
+}
     
     const [circleRadius, setCircleRadius] = useState(getRadius(props.post.like_count))
     
@@ -25,7 +26,8 @@ function PostMarker(props:PostMarkerProps) {
         <>
             <Circle color={`#${props.post.color}`} center={[props.post.latitude, props.post.longitude]} radius={circleRadius}>
                 <Popup>
-                    <PostContent onLikeJustChanged={onLikeJustChanged} post={props.post}/>
+                    <PostContent onLikeJustChanged={onLikeJustChanged} post={props.post} 
+                    nearbyPosts={props.nearbyPosts} />
                 </Popup>    
             </Circle>
         </>
