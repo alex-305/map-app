@@ -1,66 +1,183 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MapChat App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+MapChat is a social media web application that allows users to create, view, and interact with posts displayed on a world map. The size of each post's marker dynamically increases based on user engagement, promoting a sense of collaboration and community.
 
-## About Laravel
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Database Schema](#database-schema)
+- [Team Members](#team-members)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Guest features**: 
+  - Can view the posts and the comments on the map however they cant interact with them. 
+- **User Features**:
+  - Remember login
+  - Create, edit, and delete posts.
+  - Comment on posts and view existing comments.
+  - Delete their own comments.
+  - Like and unlike posts.
+  - Change map themes and styles.
+- **Dynamic Engagement**:
+  - Post markers grow in size based on the number of likes.
+- **Privacy Protection**:
+  - Locations are approximate to ensure user privacy.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Installation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Prerequisites
+1. **Node.js** (v16 or higher)
+2. **PHP** (v8.0 or higher)
+3. **Composer** (latest version)
+4. **PostgreSQL** (v13 or higher)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Steps to Install
+1. Clone the repository:
+```bash
+   git clone https://github.com/alex-305/map-app.git
+   cd map-app
+```
 
-## Laravel Sponsors
+2. Install dependencies:
+  ```bash
+   composer install
+   npm install
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. Run database migrations and seeder:
+  ```bash
+   php artisan migrate --seed
+   ```
 
-### Premium Partners
+4. Build and serve the application:
+  ```bash
+   npm run dev
+   php artisan serve
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## Usage
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Guest Features
+- Browse posts on the map.
+- View comments and engagement numbers.
+- Register/Login
 
-## Code of Conduct
+### User Features
+- Create an account, log in, and manage your profile.
+- Create and delete posts
+- Interact wih posts (like, comment, create, delete)
+- Change the map style and app theme.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Future Features
+- Adding friends
+- Private messages
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## API Endpoints
 
-## License
+### Authentication
+- `POST /register`: Register a new user
+- `POST /login`: Log in a user
+- `POST /logout`: Log out user 
+- `GET /check`: Check if the user is logged in
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Password Management
+- `POST /forgot-password`: send a password reset link to the users email
+- `POST /verify-password`: verify the password reset token
+- `POST /password/email`: send a reset link email 
+- `POST /password/reset`: reset the password 
+- `GET /password/reset/{token}`: show the password reset form
+- `GET /password/reset`: show the password reset request form 
+
+### Posts
+- `GET /posts`
+- `GET /posts/user/{userId}`
+- `POST /posts`
+- `GET /posts/{post}` 
+- `PUT /posts/{post}` 
+- `DELETE /posts/{post}` 
+
+### Likes
+- `POST /posts/{post}/like` 
+- `DELETE /posts/{post}/unlike` 
+- `GET /posts/{post}/like`
+
+### Comments
+- `GET /posts/{post}/comments`
+- `POST /posts/{post}/comments` 
+- `DELETE /posts/{post}/comments/{comment}`
+
+### Users
+- `GET /users/{user}`: 
+- `POST /users/{user}/update-username` 
+- `POST /users/{user}/update-email` 
+- `POST /users/{user}/update-password` 
+
+### Settings
+- `GET /settings`
+- `POST /settings`
+
+---
+
+## Database Schema
+
+### Users Table
+- **Fields**:
+  - `id`: primary key
+  - `username`: users display name
+  - `email`: users email address
+  - `password`: users password
+  - `email_verified_at`: timestamp for email verification
+  - `remember_token`: token for remember me functionality
+- **Relationships**:
+  - a user can create multiple posts likes and comments
+
+### Posts Table
+- **Fields**:
+  - `id`: primary key
+  - `content`: text content
+  - `latitude`: approximate latitude of the posts location
+  - `longitude`: approximate longitude of the posts location
+  - `like_count`: count of likes for the post
+  - `comment_count`: count of comments for the post
+  - `color`: represents the visual style of the post marker
+  - `author_id`: foreign key to the users table
+- **Relationships**:
+  - a post has many likes and comments
+  - a post belongs to a user
+
+### Likes Table
+- **Fields**:
+  - `id`: primary key
+  - `user_id`: foreign key to the users table
+  - `post_id`: foreign key to the posts table
+- **Relationships**:
+  - a like belongs to a user and a post
+
+### Comments Table
+- **Fields**:
+  - `id`: primary key
+  - `post_id`: foreign key to the posts table
+  - `author_id`: foreign key to the users table
+  - `content`: the comments text content
+- **Relationships**:
+  - a comment belongs to a post and a user
+
+---
+
+## Team Members
+- **Alex Gonzalez**
+- **Claudio Olmeda Florio**
+- **Samuel Anderson**
+- **Joel Bustamante**
+- **Juancarlos Alguera**
