@@ -2,17 +2,19 @@ import { post, del } from "@/scripts/http"
 import { Post } from "@/types/Post"
 import { mdiHeart, mdiHeartOutline, mdiCommentOutline } from "@mdi/js"
 import Icon from "@mdi/react"
-import { useEffect, useState } from "react"
+import { ThHTMLAttributes, useEffect, useState } from "react"
 import { get } from "../scripts/http"
 import { PostSheet } from "./PostSheet"
 
 type PostContentProps = {
-    post:Post
-    onLikeJustChanged?:(num:number) => void
-    withoutSheet?:boolean
-}
+    post: Post; // The main post to render
+    onLikeJustChanged?: (num: number) => void; // Optional callback for like count changes
+    withoutSheet?: boolean; // Determines if the comment sheet should be used
+    nearbyPosts?: Post[]; // Optional list of nearby posts
+  };
 
-function PostContent({post:postProp, onLikeJustChanged, withoutSheet = false}:PostContentProps) {
+
+function PostContent({post:postProp, onLikeJustChanged, withoutSheet = false, nearbyPosts = []}:PostContentProps) {
     const [isLiked, setIsLiked] = useState<boolean>(false)
     const [originallyLiked, setOriginallyLiked] = useState<boolean>(false)
     const [timesCommented, setTimesCommented] = useState<number>(0)
@@ -100,6 +102,23 @@ function PostContent({post:postProp, onLikeJustChanged, withoutSheet = false}:Po
                     </PostSheet>
                 )}
             </div>
+                {/* Render Nearby Posts */}
+                {nearbyPosts && nearbyPosts.length > 0 && (
+            <div>
+                <br/>
+                <br/>
+                <h4>Nearby Posts:</h4>
+                    <br/>
+                    <ul>
+                    {nearbyPosts.map((nearbyPost) => (
+                        <li key={nearbyPost.id} style={{ marginBottom: "10px" }}>
+                        <PostContent post={nearbyPost} withoutSheet={true} />
+                        <br/>
+                        </li>
+                     ))}
+                    </ul>
+            </div>
+            )}
         </div>
     );
 }

@@ -3,7 +3,7 @@ import PostCircle from "./PostCircle"
 import type { Post } from "@/types/Post"
 import { createContext, useEffect, useState } from "react"
 import { useMap } from "react-leaflet"
-import { get } from '../scripts/http'
+import { get, post } from '../scripts/http'
 import { ErrorToast } from "@/scripts/toast"
 import { Comment } from "@/types/Comment"
 
@@ -65,11 +65,30 @@ export function PostContainer() {
 
     }, [map])
 
-    return (
+    const getRadius = (post: Post) => {
+        return 50*post.like_count || 25
+    };
+
+    
+
+    const getNearbyPosts = (post: Post, ) => {
+        var radius = 50 * post.like_count || 25
+        var threshold = radius / 100000
+        return posts.filter(
+          (p) =>
+            p.id !== post.id &&
+            Math.sqrt(
+              Math.pow(post.latitude - p.latitude, 2) +
+                Math.pow(post.longitude - p.longitude, 2)
+            ) < threshold
+        );
+      }; 
+
+      return (
         <>
             <PostContext.Provider value={{ currentPost, setCurrentPost }}>
                 {posts?.length>0 && Array.isArray(posts) && posts.map((post:Post, _) => (
-                    <PostCircle key={post.id} post={post}/>
+                    <PostCircle key={post.id} post={post} nearbyPosts={getNearbyPosts(post)}/>
                 ))
                 }
             </PostContext.Provider>
